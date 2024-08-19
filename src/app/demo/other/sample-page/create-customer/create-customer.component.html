@@ -1,0 +1,80 @@
+<div class="container">
+    <h2>Create Customer</h2>
+    <form (ngSubmit)="onSubmit()" #customerForm="ngForm">
+      <div class="form-group">
+        <label for="customerName">Customer Name</label>
+        <input
+          id="customerName"
+          name="customerName"
+          type="text"
+          [(ngModel)]="customer.customerName"
+          required
+          class="form-control"
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="countryOfOrigin">Country of Origin</label>
+        <input
+          id="countryOfOrigin"
+          name="countryOfOrigin"
+          type="text"
+          [(ngModel)]="customer.countryOfOrigin"
+          required
+          class="form-control"
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="customerId">Customer Id</label>
+        <input
+          id="customerId"
+          name="customerId"
+          type="text"
+          [(ngModel)]="customer.customerId"
+          required
+          class="form-control"
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="politicallyExposedPerson">Politically Exposed Person</label>
+        <input
+          id="politicallyExposedPerson"
+          name="politicallyExposedPerson"
+          type="checkbox"
+          [(ngModel)]="customer.politicallyExposedPerson"
+          class="form-check-input"
+        />
+      </div>
+  
+  
+      <div class="form-group">
+        <label for="identityType">Identity Type</label>
+        <input
+          id="identityType"
+          name="identityType"
+          type="text"
+          [(ngModel)]="customer.identityType"
+          required
+          class="form-control"
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="identityNumber">Identity Number</label>
+        <input
+          id="identityNumber"
+          name="identityNumber"
+          type="text"
+          [(ngModel)]="customer.identityNumber"
+          required
+          class="form-control"
+        />
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
+    </form>
+  </div>
+  

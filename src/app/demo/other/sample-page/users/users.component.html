@@ -1,0 +1,85 @@
+<div class="container">
+  <div class="header">
+    <h2>Users</h2>
+    <button class="btn btn-primary" (click)="openCreateUserDialog()">Create User</button>
+  </div>
+  <div *ngIf="users.length > 0">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Designation</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.userName }}</td>
+          <td>{{ user.designation }}</td>
+          <td>
+            <button (click)="viewUser(content, user)">
+              <i class="fa fa-eye"></i>
+            </button>
+            <button (click)="editUser(editUserModal, user)">
+              <i class="fa fa-pencil"></i>
+            </button>            
+            <button (click)="blockUnblockUser(user)">
+              <i [ngClass]="user.blocked ? 'fas fa-unlock' : 'fas fa-lock'"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="users.length === 0">
+    <p>No users found.</p>
+  </div>
+
+  <!-- Modal Template -->
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">User Details</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <p><strong>ID:</strong> {{ selectedUser?.id }}</p>
+      <p><strong>Username:</strong> {{ selectedUser?.userName }}</p>
+      <p><strong>Designation:</strong> {{ selectedUser?.designation }}</p>
+      <!-- Add more user details as needed -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+  <!-- Edit User Modal Template -->
+<ng-template #editUserModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="userName" class="form-label">Username</label>
+        <input [(ngModel)]="selectedUser.userName" name="userName" id="userName" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="designation" class="form-label">Designation</label>
+        <input [(ngModel)]="selectedUser.designation" name="designation" id="designation" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="Password" class="form-label">Password</label>
+        <input [(ngModel)]="selectedUser.password" name="Password" id="password" class="form-control" />
+      </div>
+      <!-- Add more fields as needed -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="updateUser()">Save changes</button>
+  </div>
+</ng-template>
+</div>

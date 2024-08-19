@@ -1,0 +1,129 @@
+<!-- Existing Customer Table Code -->
+<div class="container">
+  <div class="header">
+    <h2>Customers</h2>
+    <button class="btn btn-primary" (click)="openCreateCustomerDialog()">Create Customer</button>
+  </div>
+  
+  <div *ngIf="customers.length > 0">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Country of Origin</th>
+          <th>Risk Score</th>
+          <th>Politically Exposed Person</th>
+          <th>Source of Income</th>
+          <th>Identity Type</th>
+          <th>Identity Number</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customers">
+          <td>{{ customer.id }}</td>
+          <td>{{ customer.customerName }}</td>
+          <td>{{ customer.countryOfOrigin }}</td>
+          <td>{{ customer.riskScore }}</td>
+          <td>{{ customer.politicallyExposedPerson ? 'Yes' : 'No' }}</td>
+          <td>{{ customer.sourceOfIncome || 'N/A' }}</td>
+          <td>{{ customer.identityType }}</td>
+          <td>{{ customer.identityNumber }}</td>
+          <td>
+            <button (click)="open(content, customer)">
+              <i class="fa fa-eye"></i>
+            </button>
+            <button (click)="openEditModal(editModal, customer.id)">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button (click)="openBlockUnblockModal(blockUnblockModal, customer)" class="btn btn-sm">
+              <i class="fas fa-ban"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="customers.length === 0">
+    <p>No customers found.</p>
+  </div>
+</div>
+
+<!-- Modal Popup -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Customer Details</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Id:</strong> {{ selectedCustomer?.id }}</p>
+    <p><strong>Name:</strong> {{ selectedCustomer?.customerName }}</p>
+    <p><strong>Country of Origin:</strong> {{ selectedCustomer?.countryOfOrigin }}</p>
+    <p><strong>Risk Score:</strong> {{ selectedCustomer?.riskScore }}</p>
+    <p><strong>Politically Exposed Person:</strong> {{ selectedCustomer?.politicallyExposedPerson ? 'Yes' : 'No' }}</p>
+    <p><strong>Identity Type:</strong> {{ selectedCustomer?.identityType }}</p>
+    <p><strong>Identity Number:</strong> {{ selectedCustomer?.identityNumber }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #editModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Customer</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="id" class="form-label">ID</label>
+        <input [(ngModel)]="selectedCustomer.id" name="id" id="id" class="form-control" readonly />
+      </div>
+      <div class="mb-3">
+        <label for="customerName" class="form-label">Name</label>
+        <input [(ngModel)]="selectedCustomer.customerName" name="customerName" id="customerName" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="countryOfOrigin" class="form-label">Country of Origin</label>
+        <input [(ngModel)]="selectedCustomer.countryOfOrigin" name="countryOfOrigin" id="countryOfOrigin" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="riskScore" class="form-label">Risk Score</label>
+        <input [(ngModel)]="selectedCustomer.riskScore" name="riskScore" id="riskScore" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="politicallyExposedPerson" class="form-label">Politically Exposed Person</label>
+        <input [(ngModel)]="selectedCustomer.politicallyExposedPerson" name="politicallyExposedPerson" id="politicallyExposedPerson" type="checkbox" class="form-check-input" />
+      </div>
+      <div class="mb-3">
+        <label for="identityType" class="form-label">Identity Type</label>
+        <input [(ngModel)]="selectedCustomer.identityType" name="identityType" id="identityType" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="identityNumber" class="form-label">Identity Number</label>
+        <input [(ngModel)]="selectedCustomer.identityNumber" name="identityNumber" id="identityNumber" class="form-control" />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="updateCustomer()">Update</button>
+  </div>
+</ng-template>
+
+<!-- Block/Unblock Modal -->
+<ng-template #blockUnblockModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Block/Unblock Customer</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to {{ selectedCustomer?.blocked ? 'unblock' : 'block' }} this customer?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Close click')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="blockUnblockCustomer()">Confirm</button>
+  </div>
+</ng-template>

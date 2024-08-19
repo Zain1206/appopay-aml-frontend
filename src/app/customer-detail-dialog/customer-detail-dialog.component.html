@@ -1,0 +1,24 @@
+<div class="modal" [ngClass]="{ 'show': isVisible }" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Customer Details</h5>
+          <button type="button" class="close" (click)="close()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p><strong>ID:</strong> {{ customer?.id }}</p>
+          <p><strong>Name:</strong> {{ customer?.customerName }}</p>
+          <p><strong>Country of Origin:</strong> {{ customer?.countryOfOrigin }}</p>
+          <p><strong>Risk Score:</strong> {{ customer?.riskScore }}</p>
+          <p><strong>Politically Exposed Person:</strong> {{ customer?.politicallyExposedPerson ? 'Yes' : 'No' }}</p>
+          <p><strong>Source of Income:</strong> {{ customer?.sourceOfIncome || 'N/A' }}</p>
+          <p><strong>Identity Type:</strong> {{ customer?.identityType }}</p>
+          <p><strong>Identity Number:</strong> {{ customer?.identityNumber }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

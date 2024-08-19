@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="header">
+      <h2>Transactions</h2>
+    </div>
+    <div *ngIf="transactions.length > 0">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Transaction Amount</th>
+            <th>Transaction Type</th>
+            <th>Transaction Description</th>
+            <th>Merchant Location</th>
+            <th>Risk Score</th>
+            <th>Allowed</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td>{{ transaction.transactionAmount }}</td>
+            <td>{{ transaction.transactionType }}</td>
+            <td>{{ transaction.transactionDescription }}</td>
+            <td>{{ transaction.merchantLocation }}</td>
+            <td>{{ transaction.riskScore }}</td>
+            <td>{{ transaction.allowed ? 'Yes' : 'No' }}</td>
+            <td>
+              <button (click)="viewTransaction(transaction, viewTransactionModal)">
+                <i class="fa fa-eye"></i>
+              </button>
+              <button (click)="flagTransaction(transaction)">
+                <i [ngClass]="transaction.allowed ? 'fas fa-flag' : 'fas fa-flag-o'"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="transactions.length === 0">
+      <p>No transactions found.</p>
+    </div>
+  
+    <!-- View Transaction Modal Template -->
+    <ng-template #viewTransactionModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Transaction Details</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Transaction Amount:</strong> {{ selectedTransaction?.transactionAmount }}</p>
+        <p><strong>Transaction Type:</strong> {{ selectedTransaction?.transactionType }}</p>
+        <p><strong>Description:</strong> {{ selectedTransaction?.transactionDescription }}</p>
+        <p><strong>Merchant Location:</strong> {{ selectedTransaction?.merchantLocation }}</p>
+        <p><strong>Risk Score:</strong> {{ selectedTransaction?.riskScore }}</p>
+        <p><strong>Allowed:</strong> {{ selectedTransaction?.allowed ? 'Yes' : 'No' }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Close</button>
+      </div>
+    </ng-template>
+  </div>
+  
