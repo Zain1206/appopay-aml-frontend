@@ -47,7 +47,7 @@ export default class RegisterComponent {
 
   // Method to handle form submission
   register(formData: { userName: string; password: string; designation: string }) {
-    const url = 'http://localhost:8080/user/sign-up';
+    const url = 'http://3.13.197.45/:8080/user/sign-up';
     const body = {
       username: formData.userName,
       password: formData.password,

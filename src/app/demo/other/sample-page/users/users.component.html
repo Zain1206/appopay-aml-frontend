@@ -1,85 +1,197 @@
 <div class="container">
-  <div class="header">
-    <h2>Users</h2>
-    <button class="btn btn-primary" (click)="openCreateUserDialog()">Create User</button>
+  <div class="card card-no-outline" style="border: hidden;">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="d-flex align-items-center text-center">
+            <!-- <i class="fa-solid fa-user-group fa-3x me-3 icon-margin"></i> -->
+            <img src="assets/images/img-2.png" alt="Total Customers" class="fa-3x me-3">
+            <div>
+              <h5 class="card-title">Total Customers</h5>
+              <p class="card-text">{{ totalCustomers }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex align-items-center text-center">
+            <!-- <i class="fa-solid fa-user-check fa-3x icon-margin"></i> -->
+            <img src="assets/images/img-1.png" alt="Total Customers" class="fa-3x me-3">
+            <div>
+              <h5 class="card-title">Merchants</h5>
+              <p class="card-text">{{ totalMerchants }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex align-items-center text-center">
+            <!-- <i class="fa-solid fa-user-check fa-3x icon-margin"></i> -->
+            <img src="assets/images/img-1.png" alt="Total Customers" class="fa-3x me-3">
+            <div>
+              <h5 class="card-title">Agents</h5>
+              <p class="card-text">{{ totalAgents }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div *ngIf="users.length > 0">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Username</th>
-          <th>Designation</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users">
-          <td>{{ user.id }}</td>
-          <td>{{ user.userName }}</td>
-          <td>{{ user.designation }}</td>
-          <td>
-            <button (click)="viewUser(content, user)">
-              <i class="fa fa-eye"></i>
+  <div class="card" style="border: hidden;">
+    <div class="header d-flex justify-content-between align-items-center">
+      <h2 class="text-left flex-grow-1">Users</h2>
+      <button class="btn btn-primary button" (click)="openCreateUserDialog(createUserModal)">Create User</button>
+    </div>
+    <div *ngIf="users.length > 0">
+      <table class="table table-bordered table-borderless " style="border-top: hidden;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Designation</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.id }}</td>
+            <td>{{ user.userName }}</td>
+            <td>{{ user.designation }}</td>
+            <div ngbDropdown>
+              <button class="btn btn-link p-0 arrow-none" ngbDropdownToggle>
+                <i class="fas fa-ellipsis-v"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem (click)="viewUser(content, user)">View</button>
+                <button ngbDropdownItem (click)="editUser(editUserModal, user)">Edit</button>
+                <button ngbDropdownItem (click)="openBlockUnblockModal(blockUnblockModal, user)">Block/Unblock</button>
+              </div>
+            </div>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination-container" style="float: inline-end; margin-bottom: 15px">
+        <button (click)="prevPage()" [disabled]="currentPage === 1">
+          < </button>
+            <button *ngFor="let page of totalPages" (click)="goToPage(page)"
+              [ngClass]="{'active-page': page === currentPage}">
+              {{ page }}
             </button>
-            <button (click)="editUser(editUserModal, user)">
-              <i class="fa fa-pencil"></i>
-            </button>            
-            <button (click)="blockUnblockUser(user)">
-              <i [ngClass]="user.blocked ? 'fas fa-unlock' : 'fas fa-lock'"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages.length"> > </button>
+              <select class="bg-custom" style="margin-left: 10px; border-radius: 4px" [(ngModel)]="pageSize" (change)="loadUsers()">
+                <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+              </select>
+      </div>
+    </div>
   </div>
   <div *ngIf="users.length === 0">
-    <p>No users found.</p>
+    <!-- <p>No users found.</p> -->
   </div>
 
-  <!-- Modal Template -->
-  <ng-template #content let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">User Details</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-      <p><strong>ID:</strong> {{ selectedUser?.id }}</p>
-      <p><strong>Username:</strong> {{ selectedUser?.userName }}</p>
-      <p><strong>Designation:</strong> {{ selectedUser?.designation }}</p>
-      <!-- Add more user details as needed -->
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Close</button>
-    </div>
-  </ng-template>
 
-  <!-- Edit User Modal Template -->
+</div>
+<!-- Modal Template -->
+<ng-template #content let-modal>
+  <div class="modal-header bg-custom">
+    <h4 class="modal-title" id="modal-basic-title">User Details</h4>
+    <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button> -->
+  </div>
+  <div class="modal-body bg-custom">
+    <p><strong>ID:</strong> {{ selectedUser?.id }}</p>
+    <p><strong>Username:</strong> {{ selectedUser?.userName }}</p>
+    <p><strong>Designation:</strong> {{ selectedUser?.designation }}</p>
+    <p><strong>Is Blocked:</strong> {{ selectedUser?.blocked }}</p>
+    <!-- Add more user details as needed -->
+  </div>
+  <div class="modal-footer bg-custom">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<!-- Edit User Modal Template -->
 <ng-template #editUserModal let-modal>
-  <div class="modal-header">
+  <div class="modal-header bg-custom">
     <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <!-- <button type="button" class="btn-close" aria-label="Close"
+        (click)="modal.dismiss('Cross click')"></button> -->
   </div>
-  <div class="modal-body">
+  <div class="modal-body bg-custom">
     <form>
       <div class="mb-3">
-        <label for="userName" class="form-label">Username</label>
-        <input [(ngModel)]="selectedUser.userName" name="userName" id="userName" class="form-control" />
+        <label for="username" class="form-label">Username</label>
+        <input [(ngModel)]="selectedUser.userName" name="username" id="username" class="form-control bg-custom" />
       </div>
       <div class="mb-3">
         <label for="designation" class="form-label">Designation</label>
-        <input [(ngModel)]="selectedUser.designation" name="designation" id="designation" class="form-control" />
+        <input [(ngModel)]="selectedUser.designation" name="designation" id="designation"
+          class="form-control bg-custom" />
       </div>
       <div class="mb-3">
         <label for="Password" class="form-label">Password</label>
-        <input [(ngModel)]="selectedUser.password" name="Password" id="password" class="form-control" />
+        <input [(ngModel)]="selectedUser.password" name="Password" id="password" class="form-control bg-custom" />
       </div>
-      <!-- Add more fields as needed -->
+      <!-- <div class="mb-3 form-check">
+        <input [(ngModel)]="selectedUser.isBlocked" name="isBlocked" id="isBlocked" class="form-check-input"
+          type="checkbox" />
+        <label class="form-check-label" for="isBlocked">Blocked</label>
+      </div> -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="blocked" name="blocked"
+               [(ngModel)]="selectedUser.blocked">
+        <label class="form-check-label" for="blocked">
+          Blocked
+        </label>
+      </div>
     </form>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Cancel</button>
-    <button type="button" class="btn btn-primary" (click)="updateUser()">Save changes</button>
+  <div class="modal-footer bg-custom d-flex justify-content-center">
+    <button type="button" class="btn btn-primary w-25 me-2" (click)="modal.close('Close click')">Cancel</button>
+    <button type="button" class="btn btn-primary w-25" (click)="updateUser()"> Save </button>
   </div>
 </ng-template>
-</div>
+
+<ng-template #createUserModal let-modal style="padding: 5;">
+  <div class="modal-content">
+    <div class="modal-header bg-custom">
+      <h4 class="modal-title" id="modal-basic-title">Create User</h4>
+      <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button> -->
+    </div>
+    <div class="modal-body bg-custom">
+      <form>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input [(ngModel)]="selectedUser.username" name="username" id="username" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input [(ngModel)]="selectedUser.password" name="password" id="password" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="designation" class="form-label">Designation</label>
+          <input [(ngModel)]="selectedUser.designation" name="designation" id="designation" class="form-control" />
+        </div>
+        <div class="mb-3 form-check">
+          <input [(ngModel)]="selectedUser.isBlocked" name="isBlocked" id="isBlocked" class="form-check-input"
+            type="checkbox" />
+          <label class="form-check-label" for="isBlocked">Blocked</label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer bg-custom d-flex justify-content-center">
+      <button type="button" class="btn btn-primary w-25" (click)="createUser()">Create</button>
+      <button type="button" class="btn btn-primary w-25 me-2" (click)="modal.close('Close click')">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #blockUnblockModal let-modal>
+  <div class="modal-header bg-custom">
+    <h4 class="modal-title">Block/Unblock User</h4>
+    <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button> -->
+  </div>
+  <div class="modal-body bg-custom">
+    <p>Are you sure you want to {{ selectedUser?.blocked ? 'unblock' : 'block' }} this user?</p>
+  </div>
+  <div class="modal-footer bg-custom d-flex justify-content-center">
+    <button type="button" class="btn btn-primary w-25" (click)="confirmBlockUnblock()">Confirm</button>
+    <button type="button" class="btn btn-primary w-25 me-2" (click)="modal.dismiss('Close click')">Cancel</button>
+  </div>
+</ng-template>

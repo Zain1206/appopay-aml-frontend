@@ -1,0 +1,349 @@
+<div class="container">
+  <h2 *ngIf="mode === 'create'" class="text-center">Create Merchant</h2>
+  <h2 *ngIf="mode === 'edit'">Edit Merchant</h2>
+  <h2 *ngIf="mode === 'view'">View Merchant</h2>
+
+  <ul ngbNav #nav="ngbNav" class="nav nav-tabs">
+    <li ngbNavItem>
+      <a ngbNavLink class="bg-custom">General Information</a>
+      <ng-template ngbNavContent>
+        <form #generalForm="ngForm">
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="legalName">Legal Name</label>
+              <input style="border-radius: 10px;" id="legalName" name="legalName" type="text"
+                [(ngModel)]="merchant.legalName" [readonly]="isFormDisabled" required class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="tradeName">Trade Name</label>
+              <input style="border-radius: 10px;" id="tradeName" name="tradeName" type="text"
+                [(ngModel)]="merchant.tradeName" [readonly]="isFormDisabled" required class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="tradeName">Trade Name</label>
+              <input style="border-radius: 10px;" id="tradeName" name="tradeName" type="text"
+                [(ngModel)]="merchant.tradeName" [readonly]="isFormDisabled" required class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="typeOfBusiness">Type of Business</label>
+              <input style="border-radius: 10px;" id="typeOfBusiness" name="typeOfBusiness" type="text"
+                [(ngModel)]="merchant.typeOfBusiness" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="startDate">Start Date</label>
+              <input style="border-radius: 10px;" id="startDate" name="startDate" type="date"
+                [(ngModel)]="merchant.startDate" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="country">Country</label>
+              <input style="border-radius: 10px;" id="country" name="country" type="text" [(ngModel)]="merchant.country"
+                [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="telephone">Telephone</label>
+              <input style="border-radius: 10px;" id="telephone" name="telephone" type="tel"
+                [(ngModel)]="merchant.telephone" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="email">Email</label>
+              <input style="border-radius: 10px;" id="email" name="email" type="email" [(ngModel)]="merchant.email"
+                [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="ruc">RUC</label>
+              <input style="border-radius: 10px;" id="ruc" name="ruc" type="text" [(ngModel)]="merchant.ruc"
+                [readonly]="isFormDisabled" class="form-control" />
+            </div>
+            <div class="mb-3" *ngIf="mode == 'edit'">
+              <div>
+                <label for="dropdown">Risk Rating</label>
+              </div>
+              <div ngbDropdown class="d-inline-block">
+                <button type="button" class="btn btn-outline-primary dropdown-toggle" id="dropdownMenu" ngbDropdownToggle>
+                  {{ merchant.riskStatus ? merchant.riskStatus : 'Choose an option' }}
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownMenu">
+                  <button type="button" class="dropdown-item" *ngFor="let option of options" (click)="selectOption(option)">
+                    {{ option }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legal Representative Information -->
+          <h4>Legal Representative Information</h4>
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="legalRepName">Legal Representative Name</label>
+              <input style="border-radius: 10px;" id="legalRepName" name="legalRepName" type="text"
+                [(ngModel)]="merchant.legalRepName" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="license">License</label>
+              <input style="border-radius: 10px;" id="license" name="license" type="text" [(ngModel)]="merchant.license"
+                [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="title">Title</label>
+              <input style="border-radius: 10px;" id="title" name="title" type="text" [(ngModel)]="merchant.title"
+                [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="dob">Date of Birth</label>
+              <input style="border-radius: 10px;" id="dob" name="dob" type="date" [(ngModel)]="merchant.dob"
+                [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="nationality">Nationality</label>
+              <input style="border-radius: 10px;" id="nationality" name="nationality" type="text"
+                [(ngModel)]="merchant.nationality" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="address">Address</label>
+              <textarea id="address" name="address" [(ngModel)]="merchant.address" [readonly]="isFormDisabled"
+                class="form-control"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="contactName">Contact Name</label>
+              <input style="border-radius: 10px;" id="contactName" name="contactName" type="text"
+                [(ngModel)]="merchant.contactName" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="contactTelephone">Contact Telephone</label>
+              <input style="border-radius: 10px;" id="contactTelephone" name="contactTelephone" type="tel"
+                [(ngModel)]="merchant.contactTelephone" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="contactEmail">Contact Email</label>
+              <input style="border-radius: 10px;" id="contactEmail" name="contactEmail" type="email"
+                [(ngModel)]="merchant.contactEmail" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <!-- Business Information -->
+          <h4>Business Information</h4>
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="monthlySales">Monthly Sales</label>
+              <input style="border-radius: 10px;" id="monthlySales" name="monthlySales" type="number"
+                [(ngModel)]="merchant.monthlySales" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label>Transaction Type</label>
+              <!-- <div>
+              <label><input type="checkbox" [(ngModel)]="merchant.transactionType.ach" [disabled]="isFormDisabled" name="ach" /> ACH</label>
+              <label><input type="checkbox" [(ngModel)]="merchant.transactionType.cash" [disabled]="isFormDisabled" name="cash" /> Cash</label>
+              <label><input type="checkbox" [(ngModel)]="merchant.transactionType.creditCards" [disabled]="isFormDisabled" name="creditCards" /> Credit Cards</label>
+            </div> -->
+              <div>
+                <label><input type="checkbox" [(ngModel)]="merchant.transactionTypech" [disabled]="isFormDisabled"
+                    name="ach" /> ACH</label>
+                <label><input type="checkbox" [(ngModel)]="merchant.transactionTypech" [disabled]="isFormDisabled"
+                    name="cash" /> Cash</label>
+                <label><input type="checkbox" [(ngModel)]="merchant.transactionTypech" [disabled]="isFormDisabled"
+                    name="creditCards" /> Credit Cards</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="averageTicket">Average Ticket</label>
+              <input style="border-radius: 10px;" id="averageTicket" name="averageTicket" type="number"
+                [(ngModel)]="merchant.averageTicket" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="monthlyTransactions">Monthly Transactions</label>
+              <input style="border-radius: 10px;" id="monthlyTransactions" name="monthlyTransactions" type="number"
+                [(ngModel)]="merchant.monthlyTransactions" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="commercialReferences">Commercial References</label>
+              <textarea id="commercialReferences" name="commercialReferences"
+                [(ngModel)]="merchant.commercialReferences" [readonly]="isFormDisabled" class="form-control"></textarea>
+            </div>
+          </div>
+
+          <!-- Bank Account Information -->
+          <h4>Bank Account Information</h4>
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="accountName">Account Name</label>
+              <input style="border-radius: 10px;" id="accountName" name="accountName" type="text"
+                [(ngModel)]="merchant.accountName" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="accountType">Account Type</label>
+              <input style="border-radius: 10px;" id="accountType" name="accountType" type="text"
+                [(ngModel)]="merchant.accountType" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="bankName">Bank Name</label>
+              <input style="border-radius: 10px;" id="bankName" name="bankName" type="text"
+                [(ngModel)]="merchant.bankName" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div class="col-sm-6">
+              <label for="accountNumber">Account Number</label>
+              <input style="border-radius: 10px;" id="accountNumber" name="accountNumber" type="text"
+                [(ngModel)]="merchant.accountNumber" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+        </div>
+      </ng-template>
+    </li>
+
+    <!-- Part 2: Additional Information -->
+    <li ngbNavItem>
+      <a ngbNavLink class="bg-custom">Additional Information</a>
+      <ng-template ngbNavContent>
+        <form #additionalForm="ngForm">
+
+          <!-- PEP Statement -->
+          <h4>PEP Statement</h4>
+          <div class="form-group row">
+            <label>Are you a Politically Exposed Person (PEP) or were you two years ago?</label>
+            <div>
+              <input type="radio" id="pepYes" name="pep" value="yes" [(ngModel)]="merchant.pepStatus"
+                (change)="togglePEPDetails(true)" [disabled]="isFormDisabled" /> Yes
+              <input type="radio" id="pepNo" name="pep" value="no" [(ngModel)]="merchant.pepStatus"
+                (change)="togglePEPDetails(false)" [disabled]="isFormDisabled" /> No
+            </div>
+          </div>
+
+          <!-- Fields shown if first PEP question is answered "Yes" -->
+          <div *ngIf="showPEPDetails" class="form-group row">
+            <div class="col-sm-6">
+              <label for="pepPosition">Position Held</label>
+              <input style="border-radius: 10px;" id="pepPosition" name="pepPosition" type="text"
+                [(ngModel)]="merchant.pepPosition" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+
+            <div *ngIf="showPEPDetails" class="col-sm-6">
+              <label for="pepStartDate">Date of Start in Office</label>
+              <input style="border-radius: 10px;" id="pepStartDate" name="pepStartDate" type="date"
+                [(ngModel)]="merchant.pepStartDate" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+          <div *ngIf="showPEPDetails" class="form-group row">
+            <div class="col-sm-6">
+              <label for="pepEndDate">Date of Termination of Office</label>
+              <input style="border-radius: 10px;" id="pepEndDate" name="pepEndDate" type="date"
+                [(ngModel)]="merchant.pepEndDate" [readonly]="isFormDisabled" class="form-control" />
+            </div>
+          </div>
+          <!-- Second PEP Question -->
+          <div class="form-group row">
+            <label>Are you associated, linked, close relative, or close collaborator of a PEP person?</label>
+            <div>
+              <input type="radio" id="associatedYes" name="associatedPEP" value="yes"
+                [(ngModel)]="merchant.associatedPEPStatus" (change)="toggleAssociatedPEPDetails(true)"
+                [disabled]="isFormDisabled" /> Yes
+              <input type="radio" id="associatedNo" name="associatedPEP" value="no"
+                [(ngModel)]="merchant.associatedPEPStatus" (change)="toggleAssociatedPEPDetails(false)"
+                [disabled]="isFormDisabled" /> No
+            </div>
+          </div>
+
+          <!-- Fields shown if second PEP question is answered "Yes" -->
+          <div *ngIf="showAssociatedPEPDetails">
+            <div *ngFor="let family of merchant.pepFamilyDetails; let i = index" class="form-group row">
+              <h5>Family Member or Acquaintance PEP {{ i + 1 }}</h5>
+              <div class="form-group row">
+                <div class="col-sm-6">
+                  <label for="familyName{{i}}">Full Name</label>
+                  <input style="border-radius: 10px;" id="familyName{{i}}" name="familyName{{i}}" type="text"
+                    [(ngModel)]="family.name" [readonly]="isFormDisabled" class="form-control" />
+                </div>
+                <div class="col-sm-6">
+                  <label for="familyKinship{{i}}">Kinship</label>
+                  <input style="border-radius: 10px;" id="familyKinship{{i}}" name="familyKinship{{i}}" type="text"
+                    [(ngModel)]="family.kinship" [readonly]="isFormDisabled" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-6">
+                  <label for="familyPosition{{i}}">Position Held</label>
+                  <input style="border-radius: 10px;" id="familyPosition{{i}}" name="familyPosition{{i}}" type="text"
+                    [(ngModel)]="family.position" [readonly]="isFormDisabled" class="form-control" />
+                </div>
+                <div class="col-sm-6">
+                  <label for="familyStartDate{{i}}">Date of Start in Office</label>
+                  <input style="border-radius: 10px;" id="familyStartDate{{i}}" name="familyStartDate{{i}}" type="date"
+                    [(ngModel)]="family.startDate" [readonly]="isFormDisabled" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-6">
+                  <label for="familyEndDate{{i}}">Date of Termination of Office</label>
+                  <input style="border-radius: 10px;" id="familyEndDate{{i}}" name="familyEndDate{{i}}" type="date"
+                    [(ngModel)]="family.endDate" [readonly]="isFormDisabled" class="form-control" />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                  <!-- Remove button for family member -->
+                  <button type="button" class="btn btn-danger mt-2 col-sm-3" (click)="removePEPFamily(i)"
+                    [disabled]="isFormDisabled">Remove</button>
+              </div>
+            </div>
+
+            <!-- Button to add more family members -->
+            <button type="button" class="btn btn-primary mt-3 col-sm-6" (click)="addPEPFamily()" [disabled]="isFormDisabled">Add
+              Family Member or Acquaintance</button>
+          </div>
+        </form>
+        <!-- Save and Cancel Buttons -->
+        <button *ngIf="mode === 'edit' || mode === 'create'" class="btn btn-primary mt-3 w-25 me-2" style="margin-bottom: 10px;"
+          (click)="onSubmit()">Create</button>
+        <button type="button" class="btn btn-primary mt-3 w-25" style="margin-bottom: 10px;" (click)="cancel()">Cancel</button>
+      </ng-template>
+    </li>
+  </ul>
+
+  <div [ngbNavOutlet]="nav" class="mt-3"></div>
+
+</div>

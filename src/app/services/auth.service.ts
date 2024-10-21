@@ -6,7 +6,9 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private loginUrl = 'http://localhost:8080/user/login';  // Replace with your API endpoint
+  // private environment = 'https://aml-backend.appopay.com'
+  private environment = 'http://localhost:8080'
+  private loginUrl =  `${this.environment}/user/login`;  // Replace with your API endpoint
 
   private headers = new HttpHeaders({
     'Content-Type': 'application/json'

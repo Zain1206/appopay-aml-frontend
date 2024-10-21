@@ -1,61 +1,88 @@
 <div class="container">
-    <div class="header">
-      <h2>Transactions</h2>
+  <div class="card" style="border: hidden; border-radius: 15px;">
+    <div class="header d-flex justify-content-between align-items-center">
+      <h2 class="flex-grow-1">Transactions</h2>
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search" (keyup)="onSearch()">
+      </div>
+      <div class="sort-dropdown" style="float: right; padding-right: 30px; padding-left: 15px;">
+        Sort by: Newest
+      </div>
     </div>
     <div *ngIf="transactions.length > 0">
-      <table class="table table-bordered">
+      <table class="table table-bordered table-borderless" style="border-top: hidden;">
         <thead>
           <tr>
+            <th>Id</th>
             <th>Transaction Amount</th>
             <th>Transaction Type</th>
             <th>Transaction Description</th>
             <th>Merchant Location</th>
             <th>Risk Score</th>
-            <th>Allowed</th>
+            <th>Flagged</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let transaction of transactions">
-            <td>{{ transaction.transactionAmount }}</td>
-            <td>{{ transaction.transactionType }}</td>
-            <td>{{ transaction.transactionDescription }}</td>
+          <tr *ngFor="let transaction of transactions" [ngClass]="getRowClass(transaction.riskScore)">
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.type }}</td>
+            <td>{{ transaction.description }}</td>
             <td>{{ transaction.merchantLocation }}</td>
             <td>{{ transaction.riskScore }}</td>
-            <td>{{ transaction.allowed ? 'Yes' : 'No' }}</td>
+            <td>{{ transaction.flagged ? 'Yes' : 'No' }}</td>
             <td>
-              <button (click)="viewTransaction(transaction, viewTransactionModal)">
-                <i class="fa fa-eye"></i>
+            <div ngbDropdown>
+              <button class="btn btn-link p-0 arrow-none" ngbDropdownToggle>
+                <i class="fas fa-ellipsis-v"></i>
               </button>
-              <button (click)="flagTransaction(transaction)">
-                <i [ngClass]="transaction.allowed ? 'fas fa-flag' : 'fas fa-flag-o'"></i>
-              </button>
-            </td>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem (click)="viewTransaction(transaction, viewTransactionModal)">View</button>
+                <button ngbDropdownItem (click)="flagTransaction(transaction)">Flag</button>
+              </div>
+            </div>
+          </td>
           </tr>
         </tbody>
       </table>
     </div>
     <div *ngIf="transactions.length === 0">
-      <p>No transactions found.</p>
+      <!-- <p>No transactions found.</p> -->
     </div>
-  
-    <!-- View Transaction Modal Template -->
-    <ng-template #viewTransactionModal let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Transaction Details</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Transaction Amount:</strong> {{ selectedTransaction?.transactionAmount }}</p>
-        <p><strong>Transaction Type:</strong> {{ selectedTransaction?.transactionType }}</p>
-        <p><strong>Description:</strong> {{ selectedTransaction?.transactionDescription }}</p>
-        <p><strong>Merchant Location:</strong> {{ selectedTransaction?.merchantLocation }}</p>
-        <p><strong>Risk Score:</strong> {{ selectedTransaction?.riskScore }}</p>
-        <p><strong>Allowed:</strong> {{ selectedTransaction?.allowed ? 'Yes' : 'No' }}</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Close</button>
-      </div>
-    </ng-template>
+
+    <div class="pagination-container" style="float: inline-end;">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">
+        < </button>
+          <button *ngFor="let page of totalPages" (click)="goToPage(page)"
+            [ngClass]="{'active-page': page === currentPage}">
+            {{ page }}
+          </button>
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages.length"> > </button>
+          <select class="bg-custom" style="margin-left: 10px; border-radius: 4px" [(ngModel)]="pageSize"
+          (change)="loadTransactions()">
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
+    </div>
   </div>
-  
+</div>
+
+<!-- View Transaction Modal Template -->
+<ng-template #viewTransactionModal let-modal>
+  <div class="modal-header bg-custom">
+    <h4 class="modal-title" id="modal-basic-title">Transaction Details</h4>
+    <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button> -->
+  </div>
+  <div class="modal-body bg-custom">
+    <p><strong>Transaction Amount:</strong> {{ selectedTransaction?.amount }}</p>
+    <p><strong>Transaction Type:</strong> {{ selectedTransaction?.type }}</p>
+    <p><strong>Description:</strong> {{ selectedTransaction?.description }}</p>
+    <p><strong>Merchant Location:</strong> {{ selectedTransaction?.merchantLocation }}</p>
+    <p><strong>Risk Score:</strong> {{ selectedTransaction?.riskScore }}</p>
+    <p><strong>Allowed:</strong> {{ selectedTransaction?.allowed ? 'Yes' : 'No' }}</p>
+  </div>
+  <div class="modal-footer bg-custom">
+    <button type="button" class="btn btn-primary" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>

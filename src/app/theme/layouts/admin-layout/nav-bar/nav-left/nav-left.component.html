@@ -15,11 +15,16 @@
       }
     </a>
   </li>
+  <li class="pc-h-item ">
+       <span class="f-w-600">Hello {{ username }}</span>
+
+  </li>
   <li class="pc-h-item pc-sidebar-popup">
     <a href="javascript:" class="pc-head-link ms-0" id="mobile-collapse1" (click)="this.NavCollapsedMob.emit()">
       <i antIcon type="menu-fold" theme="outline"></i>
     </a>
   </li>
+  
   <li class="dropdown pc-h-item d-inline-flex d-md-none" ngbDropdown>
     <a href="javascript:" class="pc-head-link dropdown-toggle arrow-none m-0" ngbDropdownToggle>
       <i class="ti ti-search"></i>

@@ -21,11 +21,13 @@ export class NavLeftComponent {
   @Output() NavCollapse = new EventEmitter();
   @Output() NavCollapsedMob = new EventEmitter();
   windowWidth: number;
+  username: string | null = '';
 
   // Constructor
   constructor(private iconService: IconService) {
     this.windowWidth = window.innerWidth;
     this.iconService.addIcon(...[MenuUnfoldOutline, MenuFoldOutline, SearchOutline]);
+    this.username = localStorage.getItem('username');
   }
 
   // public method

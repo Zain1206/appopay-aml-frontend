@@ -4,19 +4,21 @@ import { RouterModule, Routes } from '@angular/router';
 // Project import
 import { AdminComponent } from './theme/layouts/admin-layout/admin-layout.component';
 import { GuestComponent } from './theme/layouts/guest/guest.component';
+import { authGuard } from './auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
+    canActivate: [authGuard],
     children: [
       {
         path: '',
-        redirectTo: '/dashboard/default',
+        redirectTo: '/dashboard',
         pathMatch: 'full'
       },
       {
-        path: 'dashboard/default',
+        path: 'dashboard',
         loadComponent: () => import('./demo/default/dashboard/dashboard.component').then((c) => c.DefaultComponent)
       },
       {
@@ -47,6 +49,30 @@ const routes: Routes = [
         path: 'transactions',
         loadComponent: () => import('./transactions/transactions.component').then(m => m.TransactionsComponent)
       },
+      {
+        path: 'merchant',
+        loadComponent: () => import('./merchant/merchant.component').then(m => m.MerchantComponent)
+      },
+      {
+        path: 'agent',
+        loadComponent: () => import('./agent/agent.component').then(m => m.AgentComponent)
+      },
+      {
+        path: 'partner',
+        loadComponent: () => import('./partner/partner.component').then(m => m.PartnerComponent)
+      },
+      {
+        path: 'create-merchant',
+        loadComponent: () => import('./create-merchant/create-merchant.component').then(m => m.CreateMerchantComponent)
+      },
+      {
+        path: 'create-agent',
+        loadComponent: () => import('./create-agent/create-agent.component').then(m => m.CreateAgentComponent)
+      },
+      {
+        path: 'create-partner',
+        loadComponent: () => import('./create-partner/create-partner.component').then(m => m.CreatePartnerComponent)
+      },
     ]
   },
   {
@@ -62,6 +88,10 @@ const routes: Routes = [
         loadComponent: () => import('./demo/authentication/register/register.component')
       }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: 'login' // Agar koi unknown path par jaye, to login par redirect karein
   }
 ];
 

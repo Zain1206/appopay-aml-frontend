@@ -1,0 +1,180 @@
+<div class="container">
+  <div class="card" style="border: hidden; border-radius: 15px;">
+    <div class="header d-flex justify-content-between align-items-center">
+      <h2 class="text-left flex-grow-1">Merchant</h2>
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" placeholder="Search" [(ngModel)]="searchTerm" (keyup)="onSearch()">
+        <!-- <i class="search" antIcon type="search" theme="outline"></i> -->
+      </div>
+      <div class="sort-dropdown" style="float: right; padding-right: 30px; padding-left: 15px;">
+        Sort by: Newest
+      </div>
+      <button class="btn btn-primary" (click)="openCreateCustomerDialog()">Create Merchant</button>
+    </div>
+
+    <div *ngIf="merchants.length > 0">
+      <table class="table table-bordered table-borderless" style="border-top: hidden;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Legal Name</th>
+            <th>Trade Name</th>
+            <th>Type Of Business</th>
+            <th>Country</th>
+            <th>Telephone</th>
+            <th>Email</th>
+            <!-- <th>Risk Score</th> -->
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let merchant of merchants; let i = index" [ngClass]="getRowClass(merchant.risk)">
+            <td>{{ merchant.id }}</td>
+            <td>{{ merchant.legalName }}</td>
+            <td>{{ merchant.tradeName }}</td>
+            <td>{{ merchant.typeOfBusiness }}</td>
+            <td>{{ merchant.country }}</td>
+            <td>{{ merchant.telephone }}</td>
+            <td>{{ merchant.email }}</td>
+            <!-- <td>{{ merchant.riskScore }}</td> -->
+            <!-- <td>
+                <i *ngIf="merchant.politicallyExposedPerson" class="fas fa-flag" style="color: red;"></i>
+                <i *ngIf="!merchant.politicallyExposedPerson" class="fas fa-flag" style="color: grey;"></i>
+              </td> -->
+            <!-- <td>
+                <button (click)="openViewMerchant(merchant.id)">
+                  <i class="fa fa-eye"></i>
+                </button>
+                <button (click)="openEditMerchant(merchant.id)">
+                  <i class="fa fa-pencil"></i>
+                </button>
+                <button (click)="openBlockUnblockModal(blockUnblockModal, merchant)" class="btn btn-sm">
+                  <i class="fas fa-ban"></i>
+                </button>
+              </td> -->
+            <div ngbDropdown>
+              <button class="btn btn-link p-0 arrow-none" ngbDropdownToggle>
+                <i class="fas fa-ellipsis-v"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem (click)="openViewMerchant(merchant.id)">View</button>
+                <button ngbDropdownItem (click)="openEditMerchant(merchant.id)">Edit</button>
+                <button ngbDropdownItem (click)="openBlockUnblockModal(blockUnblockModal, merchant)">Block</button>
+              </div>
+            </div>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="merchants.length === 0">
+      <!-- <p>No merchants found.</p> -->
+    </div>
+
+    <div class="pagination-container" style="margin-bottom: 10px; float: inline-end">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">
+        < </button>
+          <button *ngFor="let page of totalPages" (click)="goToPage(page)"
+            [ngClass]="{'active-page': page === currentPage}">
+            {{ page }}
+          </button>
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages.length"> >
+          </button>
+          <select class="bg-custom" style="margin-left: 10px; border-radius: 4px" [(ngModel)]="pageSize"
+            (change)="loadMerchants()">
+            <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+          </select>
+    </div>
+  </div>
+</div>
+<!-- Modal Popup -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Merchant Details</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Id:</strong> {{ selectedMerchant?.id }}</p>
+    <p><strong>Name:</strong> {{ selectedMerchant?.name }}</p>
+    <p><strong>Country of Origin:</strong> {{ selectedMerchant?.countryOfOrigin }}</p>
+    <p><strong>Risk Score:</strong> {{ selectedMerchant?.riskScore }}</p>
+    <p><strong>Politically Exposed Person:</strong> {{ selectedMerchant?.politicallyExposedPerson ? 'Yes' : 'No' }}
+    </p>
+    <p><strong>Identity Type:</strong> {{ selectedMerchant?.identityType }}</p>
+    <p><strong>Identity Number:</strong> {{ selectedMerchant?.identityNumber }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #editModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Merchant</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="id" class="form-label">ID</label>
+        <input [(ngModel)]="selectedMerchant.id" name="id" id="id" class="form-control" readonly />
+      </div>
+      <div class="mb-3">
+        <label for="customerName" class="form-label">Name</label>
+        <input [(ngModel)]="selectedMerchant.name" name="customerName" id="customerName" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="countryOfOrigin" class="form-label">Country of Origin</label>
+        <input [(ngModel)]="selectedMerchant.countryOfOrigin" name="countryOfOrigin" id="countryOfOrigin"
+          class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="riskScore" class="form-label">Risk Score</label>
+        <input [(ngModel)]="selectedMerchant.riskScore" name="riskScore" id="riskScore" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="identityType" class="form-label">Identity Type</label>
+        <input [(ngModel)]="selectedMerchant.identityType" name="identityType" id="identityType" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="identityNumber" class="form-label">Identity Number</label>
+        <input [(ngModel)]="selectedMerchant.identityNumber" name="identityNumber" id="identityNumber"
+          class="form-control" />
+      </div>
+      <div class="mb-3">
+        <div>
+          <label for="dropdown">Risk Rating</label>
+        </div>
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-outline-primary dropdown-toggle" id="dropdownMenu" ngbDropdownToggle>
+            {{ selectedMerchant.riskRating || 'Choose an Option' }}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownMenu">
+            <button type="button" class="dropdown-item" *ngFor="let option of options" (click)="selectOption(option)">
+              {{ option }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Cancel</button> -->
+    <button type="button" class="btn btn-primary" (click)="updateMerchant()">Update</button>
+  </div>
+</ng-template>
+
+<!-- Block/Unblock Modal -->
+<ng-template #blockUnblockModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Block/Unblock Merchant</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to {{ selectedMerchant?.isBlocked ? 'unblock' : 'block' }} this merchant?</p>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Close click')">Cancel</button> -->
+    <button type="button" class="btn btn-primary" (click)="blockUnblockCMerchant()">Confirm</button>
+  </div>
+</ng-template>

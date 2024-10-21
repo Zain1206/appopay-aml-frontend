@@ -1,6 +1,7 @@
 // angular import
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
@@ -26,7 +27,12 @@ import {
   CommentOutline,
   UnorderedListOutline,
   ArrowRightOutline,
-  GithubOutline
+  GithubOutline,
+  KeyOutline,
+  CodepenCircleOutline,
+  PercentageOutline,
+  TransactionOutline,
+  SwapOutline
 } from '@ant-design/icons-angular/icons';
 
 @Component({
@@ -41,9 +47,11 @@ export class NavRightComponent {
   @Output() Customize = new EventEmitter();
   windowWidth: number;
   screenFull: boolean = true;
+  username: string | null = '';
 
-  constructor(private iconService: IconService) {
+  constructor(private iconService: IconService, private router: Router) {
     this.windowWidth = window.innerWidth;
+    this.username = localStorage.getItem('username');
     this.iconService.addIcon(
       ...[
         CheckCircleOutline,
@@ -62,28 +70,42 @@ export class NavRightComponent {
         ArrowRightOutline,
         BellOutline,
         GithubOutline,
-        WalletOutline
+        WalletOutline,
+        KeyOutline,
+        CodepenCircleOutline,
+        PercentageOutline,
+        TransactionOutline,
+        SwapOutline
       ]
     );
   }
 
+  logout() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('totalMerchants');
+    localStorage.removeItem('totalAgents');
+    localStorage.removeItem('totalCustomers');
+    this.router.navigate(['/login']); // Redirect to login page
+  }
+  
   profile = [
-    {
-      icon: 'edit',
-      title: 'Edit Profile'
-    },
-    {
-      icon: 'user',
-      title: 'View Profile'
-    },
-    {
-      icon: 'profile',
-      title: 'Social Profile'
-    },
-    {
-      icon: 'wallet',
-      title: 'Billing'
-    }
+    // {
+    //   icon: 'edit',
+    //   title: 'Edit Profile'
+    // },
+    // {
+    //   icon: 'user',
+    //   title: 'View Profile'
+    // },
+    // {
+    //   icon: 'profile',
+    //   title: 'Social Profile'
+    // },
+    // {
+    //   icon: 'wallet',
+    //   title: 'Billing'
+    // }
   ];
 
   setting = [

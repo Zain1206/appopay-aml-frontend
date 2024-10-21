@@ -8,13 +8,16 @@ import { NavBarComponent } from '../theme/layouts/admin-layout/nav-bar/nav-bar.c
 import { NavigationComponent } from '../theme/layouts/admin-layout/navigation/navigation.component';
 import { CustomersService } from '../services/customers.service';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { IconService } from '@ant-design/icons-angular';
+import { MenuUnfoldOutline, MenuFoldOutline, SearchOutline } from '@ant-design/icons-angular/icons';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-customers',
   imports: [CommonModule, SharedModule, NavigationComponent, NavBarComponent, RouterModule],
   standalone: true,
   templateUrl: './customers.component.html',
-  styleUrls: [] // Remove or replace with a valid CSS path
+  styleUrls: ['./customers.component.scss']
 })
 
 export class CustomersComponent implements OnInit {
@@ -25,26 +28,77 @@ export class CustomersComponent implements OnInit {
   size: number = 10;
   error: string | null = null;
   closeResult = '';
-  selectedCustomer: any = null; // To store selected customer data
+  selectedCustomer: any = null;
   private modalService = inject(NgbModal);
   private modalRef: NgbModalRef | null = null;
-  blockUnblockModalRef: NgbModalRef | undefined
+  blockUnblockModalRef: NgbModalRef | undefined;
+  totalElements: number = 0; // Total number of users (for pagination)
+  totalPages: number[] = [];  // Total pages for pagination
+  currentPage: number = 1;  // Current page
+  pageSize: number = 5;  // Records per page
+  totalRecords: number = 0;
+  windowWidth: number;
+  searchTerm: string = ''; 
+  customersOriginal: any[] = [];
+  pageSizeOptions: number[] = [5, 10, 20, 50, 100];
+  options = ['HIGH', 'MEDIUM', 'LOW'];
 
-  constructor(private http: HttpClient, private router: Router, private customersService: CustomersService) {}
+  constructor(private http: HttpClient, private router: Router, private customersService: CustomersService,
+    private iconService: IconService) {
+      this.windowWidth = window.innerWidth;
+      this.iconService.addIcon(...[MenuUnfoldOutline, MenuFoldOutline, SearchOutline]);
+    }
 
   ngOnInit(): void {
     this.loadCustomers();
   }
 
+  selectOption(option: string) {
+    this.selectedCustomer.riskStatus = option;
+  }
+
   loadCustomers(): void {
-    this.customersService.getAllCustomers(this.page, this.size).subscribe(
-      data => {
-        this.customers = data.data; // Adjust based on the actual response structure
+    const pageIndex = this.currentPage - 1; 
+    this.customersService.getAllCustomers(pageIndex, this.pageSize).subscribe((response: any) => {
+      this.customers = response.data.sort((a: any, b: any) => a.id - b.id);
+      this.customersOriginal = [...this.customers]; // Save the original customer list
+      this.totalRecords = response.totalDocuments;
+      this.setPagination(this.totalRecords);
+
       },
       err => {
         this.error = 'Error fetching customers: ' + err.message;
       }
     );
+  }
+
+  onPageChange(pageNumber: number): void {
+    this.page = pageNumber;
+    this.loadCustomers();
+  }
+  
+  setPagination(totalRecords: number): void {
+    const totalPagesCount = Math.ceil(totalRecords / this.pageSize);
+    this.totalPages = Array.from({ length: totalPagesCount }, (_, index) => index + 1);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.loadCustomers();
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadCustomers();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages.length) {
+      this.currentPage++;
+      this.loadCustomers();
+    }
   }
 
   open(content: TemplateRef<any>, customer: any) {
@@ -59,7 +113,6 @@ export class CustomersComponent implements OnInit {
     );
   }
   
-
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -74,32 +127,52 @@ export class CustomersComponent implements OnInit {
     this.router.navigate(['/create-customer']);
   }
 
-  // editCustomer(customer: any): void {
-  //   this.router.navigate(['/edit-customer', customer.id]);
-  // }
-  openEditModal(content: TemplateRef<any>, customerId: number): void {
-    this.customersService.getCustomerById(customerId).subscribe(
-      data => {
-        this.selectedCustomer = data; // Load customer data
-        this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
-      },
-      err => {
-        console.error('Error fetching customer:', err.message);
+
+  openEditModal(content: TemplateRef<any>, customerId: number, customerName: string): void {
+    const customerData = this.customersService.getCustomerById(customerId);
+    const ofacData = this.customersService.getOfac(customerName);
+  
+    forkJoin([customerData, ofacData]).subscribe(([customerData, ofacData]) => {
+      this.selectedCustomer = customerData;
+
+      if (ofacData) { // Check if OFAC data is available
+        this.selectedCustomer.message = ofacData.message;
       }
-    );
+
+      this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    },
+    err => {
+      console.error('Error fetching data:', err.message);
+    });
   }
 
+  
   updateCustomer(): void {
     if (this.selectedCustomer) {
+      console.log("sending update request" + this.selectedCustomer)
       this.customersService.updateCustomer(this.selectedCustomer.id, this.selectedCustomer).subscribe(
         () => {
-          this.loadCustomers(); // Refresh customers list after update
+          this.loadCustomers();
           if (this.modalRef) {
-            this.modalRef.close(); // Close the modal
+            this.modalRef.close();
           }
         },
         err => {
           console.error('Error updating customer:', err.message);
+        }
+      );
+    }
+  }
+
+  deleteCustomer(customerId: string): void {
+    if (confirm('Are you sure you want to delete this customer?')) {
+      this.customersService.deleteCustomer(customerId).subscribe(
+        response => {
+          console.log('Customer deleted successfully:', response);
+          this.loadCustomers();
+        },
+        error => {
+          console.log('Error occurred while deleting customer:', error);
         }
       );
     }
@@ -116,9 +189,9 @@ export class CustomersComponent implements OnInit {
       response => {
         console.log('Block/Unblock response:', response);
         this.selectedCustomer.blocked = block;
-        this.loadCustomers(); // Refresh the customer list
+        this.loadCustomers();
         if (this.blockUnblockModalRef) {
-          this.blockUnblockModalRef.close(); // Close the modal using NgbModalRef
+          this.blockUnblockModalRef.close();
         }
       },
       error => {
@@ -126,5 +199,26 @@ export class CustomersComponent implements OnInit {
         // Handle error
       }
     );
+  }
+
+  getRowClass(riskScore: number): any {
+    if (riskScore < 10) {
+      return { 'background-color': '#3ac093' };
+    } else if (riskScore >= 10 && riskScore < 15) {
+      return { 'background-color': '#ffe365' };
+    } else {
+      return { 'background-color': '#f88080' };
+    }
+  }
+
+  onSearch() {
+    const searchTerm = this.searchTerm.toLowerCase();
+    if (searchTerm === '') {
+      this.customers = [...this.customersOriginal];
+    } else {
+      this.customers = this.customersOriginal.filter(customer => {
+        return customer.customerName.toLowerCase().includes(searchTerm);
+      });
+    }
   }
 }

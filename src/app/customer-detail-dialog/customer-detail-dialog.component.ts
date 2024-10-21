@@ -5,7 +5,7 @@ import { CustomerDetailDialogService } from '../services/customer-detail-dialog.
 @Component({
   selector: 'app-customer-detail-dialog',
   templateUrl: './customer-detail-dialog.component.html',
-  styleUrls: ['./customer-detail-dialog.component.css']
+  styleUrls: ['']
 })
 export class CustomerDetailDialogComponent implements OnInit {
   customerId: number | null = null;
@@ -25,7 +25,7 @@ export class CustomerDetailDialogComponent implements OnInit {
   }
 
   loadCustomerDetails(customerId: number): void {
-    this.http.get(`http://localhost:8080/customer/${customerId}`).subscribe(
+    this.http.get(`https://aml-backend.appopay.com/customer/${customerId}`).subscribe(
       (response: any) => {
         this.customer = response;
       },

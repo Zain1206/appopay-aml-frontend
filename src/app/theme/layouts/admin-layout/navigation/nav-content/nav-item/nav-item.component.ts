@@ -2,21 +2,31 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 // Project import
 import { NavigationItem } from '../../navigation';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { faHandshake,
+   faCoffee,faKey, faCube, faWallet, faMoneyBill
+ } from '@fortawesome/free-solid-svg-icons'; // Import FontAwesome icons
 
 @Component({
   selector: 'app-nav-item',
   standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule],
+  imports: [CommonModule, SharedModule, RouterModule, FontAwesomeModule],
   templateUrl: './nav-item.component.html',
   styleUrls: ['./nav-item.component.scss']
 })
 export class NavItemComponent {
+  public faHandshake = faHandshake;
+  public faCoffee = faCoffee;
+  public faKey = faKey;
+  public faCube = faCube;
+  public faWallet = faWallet;
+  public faMoneyBill = faMoneyBill;
   // public props
-  @Input() item!: NavigationItem;
+  @Input() item!: any;
 
   // public method
   closeOtherMenu(event: MouseEvent) {

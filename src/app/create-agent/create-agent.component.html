@@ -1,0 +1,484 @@
+<div class="container">
+  <h2 *ngIf="mode === 'create'" class="text-center">Create Agent</h2>
+  <h2 *ngIf="mode === 'edit'">Edit Agent</h2>
+  <h2 *ngIf="mode === 'view'">View Agent</h2>
+
+  <ul ngbNav #nav="ngbNav" class="nav nav-tabs">
+    <!-- Part 1: Company Details -->
+    <li ngbNavItem>
+      <a ngbNavLink class="bg-custom">Company Details</a>
+      <ng-template ngbNavContent>
+        <form #companyForm="ngForm">
+          <!-- Company Details Fields -->
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="companyRegisteredName">Company Registered Name</label>
+              <input style="border-radius: 10px;" id="companyRegisteredName" name="companyRegisteredName" type="text"
+                placeholder="Enter company registered name" [(ngModel)]="partner.compRegName" required
+                class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="tradeName">Trade Name</label>
+              <input style="border-radius: 10px;" id="tradeName" name="tradeName" type="text"
+                placeholder="Enter trade name" [(ngModel)]="partner.compTradeName" required class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="taxIdentificationNumber">Tax Identification Number</label>
+              <input style="border-radius: 10px;" id="taxIdentificationNumber" name="taxIdentificationNumber"
+                type="text" placeholder="Enter tax identification number" [(ngModel)]="partner.compTaxNumber" required
+                class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="companyRegistrationNumber">Company Registration Number</label>
+              <input style="border-radius: 10px;" id="companyRegistrationNumber" name="companyRegistrationNumber"
+                type="text" placeholder="Enter company registration number" [(ngModel)]="partner.companyRegNumber"
+                required class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="country">Country</label>
+              <input style="border-radius: 10px;" id="country" name="country" type="text" placeholder="Enter country"
+                [(ngModel)]="partner.compRegCountry" required class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="registrationDate">Registration Date</label>
+              <input style="border-radius: 10px;" id="registrationDate" name="registrationDate" type="date"
+                [(ngModel)]="partner.compRegDate" required class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="provinceState">Province/State</label>
+              <input style="border-radius: 10px;" id="provinceState" name="provinceState" type="text"
+                placeholder="Enter province/state" [(ngModel)]="partner.compRegProvince" required
+                class="form-control" />
+            </div>
+            <div class="col-sm-6" *ngIf="mode == 'edit'">
+              <div>
+                <label for="dropdown">Risk Rating</label>
+                <div ngbDropdown class="d-inline-block">
+                  <button type="button" class="btn btn-outline-primary dropdown-toggle" id="dropdownMenu"
+                    ngbDropdownToggle>
+                    {{ partner.riskStatus ? partner.riskStatus : 'Choose an option' }}
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownMenu">
+                    <button type="button" class="dropdown-item" *ngFor="let option of options"
+                      (click)="selectOption(option)">
+                      {{ option }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Current Address Section -->
+          <div class="address-section">
+            <h4>Current Address</h4>
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="currentAddressStreet">Street / City</label>
+                <input style="border-radius: 10px;" id="currentAddressStreet" name="currentAddressStreet" type="text"
+                  placeholder="Enter street / city" [(ngModel)]="partner.currentAddressStreet" required
+                  class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="currentAddressZipCode">Zip Code</label>
+                <input style="border-radius: 10px;" id="currentAddressZipCode" name="currentAddressZipCode" type="text"
+                  placeholder="Enter zip code" [(ngModel)]="partner.currentAddressZipCode" required
+                  class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="currentAddressState">State</label>
+                <input style="border-radius: 10px;" id="currentAddressState" name="currentAddressState" type="text"
+                  placeholder="Enter state" [(ngModel)]="partner.currentAddressState" required class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="currentAddressProvince">Province</label>
+                <input style="border-radius: 10px;" id="currentAddressProvince" name="currentAddressProvince"
+                  type="text" placeholder="Enter province" [(ngModel)]="partner.currentAddressProvince" required
+                  class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="currentAddressCountry">Country</label>
+                <input style="border-radius: 10px;" id="currentAddressCountry" name="currentAddressCountry" type="text"
+                  placeholder="Enter country" [(ngModel)]="partner.currentAddressCountry" required
+                  class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Physical Address Section -->
+          <div class="address-section">
+            <h4>Physical Address</h4>
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="physicalAddressStreet">Street / City</label>
+                <input style="border-radius: 10px;" id="physicalAddressStreet" name="physicalAddressStreet" type="text"
+                  placeholder="Enter street / city" [(ngModel)]="partner.physicalAddressStreet" required
+                  class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="physicalAddressZipCode">Zip Code</label>
+                <input style="border-radius: 10px;" id="physicalAddressZipCode" name="physicalAddressZipCode"
+                  type="text" placeholder="Enter zip code" [(ngModel)]="partner.physicalAddressZipCode" required
+                  class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="physicalAddressState">State</label>
+                <input style="border-radius: 10px;" id="physicalAddressState" name="physicalAddressState" type="text"
+                  placeholder="Enter state" [(ngModel)]="partner.physicalAddressState" required class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="physicalAddressProvince">Province</label>
+                <input style="border-radius: 10px;" id="physicalAddressProvince" name="physicalAddressProvince"
+                  type="text" placeholder="Enter province" [(ngModel)]="partner.physicalAddressProvince" required
+                  class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="physicalAddressCountry">Country</label>
+                <input style="border-radius: 10px;" id="physicalAddressCountry" name="physicalAddressCountry"
+                  type="text" placeholder="Enter country" [(ngModel)]="partner.physicalAddressCountry" required
+                  class="form-control" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Company Fields -->
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="mainPhoneNumber">Main Phone Number</label>
+              <input style="border-radius: 10px;" id="mainPhoneNumber" name="mainPhoneNumber" type="text"
+                placeholder="Enter main phone number" [(ngModel)]="partner.mainPhoneNumber" required
+                class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="secondaryPhoneNumber">Secondary Phone Number</label>
+              <input style="border-radius: 10px;" id="secondaryPhoneNumber" name="secondaryPhoneNumber" type="text"
+                placeholder="Enter secondary phone number (optional)" [(ngModel)]="partner.secondaryPhoneNumber"
+                class="form-control" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="companyWebsite">Company Website</label>
+              <input style="border-radius: 10px;" id="companyWebsite" name="companyWebsite" type="text"
+                placeholder="Enter company website" [(ngModel)]="partner.companyWebsite" class="form-control" />
+            </div>
+          </div>
+          <!-- Is the company listed on the regulated stock exchange? -->
+          <div class="form-group">
+            <label for="isListed">Is the company listed on the regulated stock exchange?</label>
+            <div>
+              <input type="radio" id="isListedYes" name="isListed"
+                [(ngModel)]="partner.isListed" value="Yes" />
+              <label class="me-2" for="isListedYes">Yes</label>
+
+              <input type="radio" id="isListedNo" name="isListed"
+                [(ngModel)]="partner.isListed" value="No" />
+              <label for="isListedNo">No</label>
+            </div>
+          </div>
+          <div *ngIf="partner.isListed === 'Yes'" class="form-group row">
+            <div class="col-sm-6">
+              <label for="exchangeName">Exchange Name</label>
+              <input style="border-radius: 10px;" id="exchangeName" name="exchangeName" type="text"
+                placeholder="Enter exchange name" [(ngModel)]="partner.exchangeName" class="form-control" />
+            </div>
+            <div *ngIf="partner.isListed === 'Yes'" class="col-sm-6">
+              <label for="symbolListed">Symbol Listed</label>
+              <input style="border-radius: 10px;" id="symbolListed" name="symbolListed" type="text"
+                placeholder="Enter symbol listed" [(ngModel)]="partner.symbolListed" class="form-control" />
+            </div>
+          </div>
+
+          <!-- Is a U.S. company federally regulated by a financial entity? -->
+          <div class="form-group">
+            <label for="isRegulated">Is a U.S. company federally regulated by a financial entity?</label>
+            <div>
+              <input style="border-radius: 10px;" type="radio" id="isRegulatedYes" name="isRegulated"
+                [(ngModel)]="partner.isRegulated" value="Yes" />
+              <label class="me-2" for="isRegulatedYes">Yes</label>
+
+              <input style="border-radius: 10px;" type="radio" id="isRegulatedNo" name="isRegulated"
+                [(ngModel)]="partner.isRegulated" value="No" />
+              <label for="isRegulatedNo">No</label>
+            </div>
+          </div>
+          <div *ngIf="partner.isRegulated === 'Yes'" class="form-group">
+            <label for="usFederalRegulator">Name of the U.S. federal regulator</label>
+            <input style="border-radius: 10px;" id="usFederalRegulator" name="usFederalRegulator" type="text"
+              placeholder="Enter U.S. federal regulator name" [(ngModel)]="partner.usFederalRegulator"
+              class="form-control" />
+          </div>
+          <div *ngIf="partner.isRegulated === 'No'" class="form-group">
+            <label for="financialServicesRegulator">Name of Financial Services Regulator</label>
+            <input style="border-radius: 10px;" id="financialServicesRegulator" name="financialServicesRegulator"
+              type="text" placeholder="Enter financial services regulator name"
+              [(ngModel)]="partner.financialServicesRegulator" class="form-control" />
+          </div>
+
+          <!-- Primary Contact -->
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="primaryContactName">Primary Contact Name</label>
+              <input style="border-radius: 10px;" id="primaryContactName" name="primaryContactName" type="text"
+                placeholder="Enter primary contact name" [(ngModel)]="partner.primaryContactName" required
+                class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="primaryContactEmail">Email</label>
+              <input style="border-radius: 10px;" id="primaryContactEmail" name="primaryContactEmail" type="email"
+                placeholder="Enter email" [(ngModel)]="partner.primaryContactEmail" required class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="primaryContactPhone">Direct Phone</label>
+              <input style="border-radius: 10px;" id="primaryContactPhone" name="primaryContactPhone" type="text"
+                placeholder="Enter direct phone" [(ngModel)]="partner.primaryContactPhone" required
+                class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="primaryContactPosition">Position/Role</label>
+              <input style="border-radius: 10px;" id="primaryContactPosition" name="primaryContactPosition" type="text"
+                placeholder="Enter position/role" [(ngModel)]="partner.primaryContactPosition" required
+                class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="primaryContactExtension">Extension</label>
+              <input style="border-radius: 10px;" id="primaryContactExtension" name="primaryContactExtension"
+                type="text" placeholder="Enter extension" [(ngModel)]="partner.primaryContactExtension"
+                class="form-control" />
+            </div>
+          </div>
+
+          <!-- Authorized Signatory -->
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="authorizedSignatoryName">Authorized Signatory Name</label>
+              <input style="border-radius: 10px;" id="authorizedSignatoryName" name="authorizedSignatoryName"
+                type="text" placeholder="Enter authorized signatory name" [(ngModel)]="partner.authorizedSignatoryName"
+                required class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="authorizedSignatoryPosition">Authorized Signatory Position/Role</label>
+              <input style="border-radius: 10px;" id="authorizedSignatoryPosition" name="authorizedSignatoryPosition"
+                type="text" placeholder="Enter authorized signatory position/role"
+                [(ngModel)]="partner.authorizedSignatoryPosition" required class="form-control" />
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+        </div>
+      </ng-template>
+    </li>
+
+    <!-- Part 2: Ownership and Control Structure -->
+    <li ngbNavItem>
+      <a ngbNavLink class="bg-custom">Ownership & Control</a>
+      <ng-template ngbNavContent>
+        <form #ownershipForm="ngForm">
+          <!-- Dynamic Ownership Fields -->
+          <div *ngFor="let owner of partner.owners; let i = index" class="owner-section">
+            <h5>Owner {{ i + 1 }}</h5>
+            <!-- Owner Details -->
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="ownerName{{i}}">Full Name</label>
+                <input style="border-radius: 10px;" id="ownerName{{i}}" name="ownerName{{i}}" type="text"
+                  placeholder="Enter full name" [(ngModel)]="owner.name" required class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="ownerDOB{{i}}">Date of Birth</label>
+                <input style="border-radius: 10px;" id="ownerDOB{{i}}" name="ownerDOB{{i}}" type="date"
+                  [(ngModel)]="owner.dob" required class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="ownerNationality{{i}}">Nationality</label>
+                <input style="border-radius: 10px;" id="ownerNationality{{i}}" name="ownerNationality{{i}}" type="text"
+                  placeholder="Enter nationality" [(ngModel)]="owner.nationality" required class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="ownerAddress{{i}}">Full Residential Address</label>
+                <input style="border-radius: 10px;" id="ownerAddress{{i}}" name="ownerAddress{{i}}" type="text"
+                  placeholder="Enter residential address" [(ngModel)]="owner.address" required class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="ownerOwnership{{i}}">Percentage of Ownership</label>
+                <input style="border-radius: 10px;" id="ownerOwnership{{i}}" name="ownerOwnership{{i}}" type="number"
+                  placeholder="Enter percentage of ownership" [(ngModel)]="owner.ownership" required
+                  class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="ownerPepStatus{{i}}">Politically Exposed Person (PEP)</label>
+                <select id="ownerPepStatus{{i}}" name="ownerPepStatus{{i}}" [(ngModel)]="owner.pepStatus"
+                  class="form-control" required>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" class="btn btn-danger col-sm-4" style="margin-bottom: 10px;" (click)="removeOwner(i)">Remove Owner</button>
+          </div>
+          <button type="button" class="btn btn-primary col-sm-4" style="margin-bottom: 10px;" (click)="addOwner()">+ Add Owner</button>
+
+          <!-- Dynamic Administrator Fields -->
+          <div *ngFor="let admin of partner.admins; let j = index" class="admin-section mt-4">
+            <h5>Administrator {{ j + 1 }}</h5>
+            <!-- Administrator Details -->
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="adminName{{j}}">Full Name</label>
+                <input style="border-radius: 10px;" id="adminName{{j}}" name="adminName{{j}}" type="text"
+                  placeholder="Enter full name" [(ngModel)]="admin.name" required class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="adminDOB{{j}}">Date of Birth</label>
+                <input style="border-radius: 10px;" id="adminDOB{{j}}" name="adminDOB{{j}}" type="date"
+                  [(ngModel)]="admin.dob" required class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="adminNationality{{j}}">Nationality</label>
+                <input style="border-radius: 10px;" id="adminNationality{{j}}" name="adminNationality{{j}}" type="text"
+                  placeholder="Enter nationality" [(ngModel)]="admin.nationality" required class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="adminPosition{{j}}">Position/Role</label>
+                <input style="border-radius: 10px;" id="adminPosition{{j}}" name="adminPosition{{j}}" type="text"
+                  placeholder="Enter position/role" [(ngModel)]="admin.position" required class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="adminCity{{j}}">City of Residence</label>
+                <input style="border-radius: 10px;" id="adminCity{{j}}" name="adminCity{{j}}" type="text"
+                  placeholder="Enter city of residence" [(ngModel)]="admin.city" required class="form-control" />
+              </div>
+              <div class="col-sm-6">
+                <label for="adminCountry{{j}}">Country of Residence</label>
+                <input style="border-radius: 10px;" id="adminCountry{{j}}" name="adminCountry{{j}}" type="text"
+                  placeholder="Enter country of residence" [(ngModel)]="admin.country" required class="form-control" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-sm-6">
+                <label for="adminPepStatus{{j}}">Politically Exposed Person (PEP)</label>
+                <select id="adminPepStatus{{j}}" name="adminPepStatus{{j}}" [(ngModel)]="admin.pepStatus"
+                  class="form-control" required>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" class="btn btn-danger col-sm-4" style="margin-bottom: 10px;" (click)="removeAdmin(j)">Remove Administrator</button>
+          </div>
+          <button type="button" class="btn btn-primary col-sm-4" style="margin-bottom: 10px;" (click)="addAdmin()">+ Add Administrator</button>
+        </form>
+        <div class="modal-footer">
+        </div>
+      </ng-template>
+    </li>
+
+    <!-- Part 3: Relationship Profile -->
+    <li ngbNavItem>
+      <a ngbNavLink class="bg-custom">Relationship Profile</a>
+      <ng-template ngbNavContent>
+        <form #relationshipForm="ngForm">
+          <!-- Relationship Profile Fields -->
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="financingBankName">Financing Bank Name</label>
+              <input style="border-radius: 10px;" id="financingBankName" name="financingBankName" type="text"
+                placeholder="Enter bank name" [(ngModel)]="partner.financingBankName" required class="form-control" />
+            </div>
+            <div class="col-sm-6">
+              <label for="swiftCode">Swift Code</label>
+              <input style="border-radius: 10px;" id="swiftCode" name="swiftCode" type="text"
+                placeholder="Enter swift code" [(ngModel)]="partner.swiftCode" required class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label for="fundingAccountName">Funding Account Name</label>
+              <input style="border-radius: 10px;" id="fundingAccountName" name="fundingAccountName" type="text"
+                placeholder="Enter funding account name" [(ngModel)]="partner.fundingAccountName" required
+                class="form-control" />
+            </div>
+          </div>
+          <div>
+            <label>Select all currencies used:</label>
+            <div>
+              <!-- <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.USD" name="USD" /> USD</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.HEAR" name="HEAR" /> HEAR</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.HKD" name="HKD" /> HKD</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.UAE" name="UAE" /> UAE</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.EUR" name="EUR" /> EUR</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.CAD" name="CAD" /> CAD</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.PHP" name="PHP" /> PHP</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.XOF" name="XOF" /> XOF</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.GBP" name="GBP" /> GBP</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.GMD" name="GMD" /> GMD</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.SGD" name="SGD" /> SGD</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.YEN" name="YEN" /> YEN</label>
+              <label><input type="checkbox" [(ngModel)]="partner.currenciesUsed.DEA" name="DEA" /> DEA</label> -->
+            </div>
+          </div>
+          <div class="form-group ">
+            <label for="businessDescription">Business Overview</label>
+            <textarea style="border-radius: 10px;" id="businessDescription" name="businessDescription"
+              placeholder="Enter business description" [(ngModel)]="partner.businessDescription" required
+              class="form-control"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="sourceOfFunds">Source of Funds</label>
+            <textarea style="border-radius: 10px;" id="sourceOfFunds" name="sourceOfFunds"
+              placeholder="Enter source of funds" [(ngModel)]="partner.sourceOfFunds" required
+              class="form-control"></textarea>
+          </div>
+        </form>
+        <button *ngIf="mode === 'create'" class="btn btn-primary mt-3  w-15 me-2"  style="margin-bottom: 10px;" (click)="onSubmit()">Create</button>
+        <button *ngIf="mode === 'edit'" class="btn btn-primary mt-3  w-15 me-2"  style="margin-bottom: 10px;" (click)="onSubmit()">Update</button>
+        <button type="button" class="btn btn-primary mt-3  w-15 " style="margin-bottom: 10px;" (click)="cancel()">Cancel</button>
+      </ng-template>
+    </li>
+    <div class="modal-footer">
+    </div>
+  </ul>
+
+  <div [ngbNavOutlet]="nav" class="mt-3"></div> 
+</div>

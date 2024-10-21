@@ -1,0 +1,108 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.table th,
+.table td {
+  border: none !important;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: none !important;
+}
+
+
+.bg-success {
+  background-color: #3ac093 !important;
+}
+
+.bg-info {
+  background-color: #ffe365 !important;
+}
+
+.bg-danger {
+  background-color: #fce4ec !important;
+}
+
+.serial-column {
+  background-color: white !important;
+  color: black !important;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.active-page {
+  font-weight: bold;
+  color: blue;
+}
+
+.pagination-container button {
+  margin-left: 10px;
+  border-radius: 4px;
+}
+
+.pagination-container button.active-page {
+  background-color: blue;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.pagination-container button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  border-radius: 4px;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f2f7ff;
+  border: none !important;
+  border-radius: 10px;
+  padding: 5px;
+  box-shadow: #999;
+}
+
+.search-bar input {
+  border: none !important;
+  outline: none;
+  flex-grow: 1;
+  padding: 5px;
+  background-color: #f2f7ff;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.x {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #f2f7ff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.bg-custom {
+  background-color: #DDEFFF;
+}
+
+.button-color{
+  background-color: #02569F;
+}

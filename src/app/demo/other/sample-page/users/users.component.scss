@@ -1,25 +1,135 @@
-.users-container {
-    padding: 20px;
-    background-color: #f9f9f9;
+// .users-container {
+//     padding: 20px;
+//     background-color: #4f93d3;
+//   }
+  
+//   table {
+//     width: 100%;
+//     border-collapse: collapse;
+//   }
+  
+//   th, td {
+//     padding: 10px;
+//     border: 1px solid #ddd;
+//     color: white;
+//     background-color: white;
+//   }
+  
+//   th {
+//     background-color:white;
+//     color: white;
+//   }
+//   .customer-table tr {
+//     border: 1px solid #ccc;
+//   }
+
+//   .header {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     padding: 10px;
+//   }
+
+//   h2 {
+//     margin: 0;
+//     text-align: center;
+//     flex-grow: 1;
+//   }
+  
+  // .customer-list-container {
+  //   width: 100%;
+  //   padding: 20px;
+  // }
+  
+  // .customer-table {
+  //   width: 100%;
+  //   border-collapse: collapse;
+  //   margin-bottom: 20px;
+  // }
+  
+  // .customer-table th, .customer-table td {
+  //   border: 1px solid #ddd;
+  //   padding: 8px;
+  //   text-align: center;
+  // }
+  
+  // .customer-table th {
+  //   background-color: #f2f2f2;
+  // }
+
+  // .card-no-outline {
+  //   border: none;
+  //   box-shadow: none;
+  // }
+  // .card .header h2.text-left {
+  //   border-bottom: none;
+  // }
+
+  .bg-custom {
+    background-color: #DDEFFF; /* Your desired background color */
+  }
+
+  .button-color{
+    background-color: #02569F;
   }
   
-  .create-user-btn {
-    float: right;
-    margin-bottom: 20px;
+  .pagination-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
   
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  .active-page {
+    font-weight: bold;
+    color: blue;
   }
   
-  th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
+  .pagination-container button {
+    margin-left: 10px;
+    border-radius: 4px;
+    /* Adjust the space between buttons */
   }
   
-  th {
-    background-color: #88b9e7;
+  .pagination-container button.active-page {
+    background-color: blue;
     color: white;
+    font-weight: bold;
+    border-radius: 4px;
   }
   
+  .pagination-container button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    border-radius: 4px;
+  }
+  
+  .search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #f2f7ff;
+    border: none !important;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: #999;
+  }
+  
+  .search-bar input {
+    border: none !important;
+    outline: none;
+    flex-grow: 1;
+    padding: 5px;
+    background-color: #f2f7ff;
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+  }
+
+  .icon-margin {
+    margin-right: 15px; /* Adjust as needed */
+  }

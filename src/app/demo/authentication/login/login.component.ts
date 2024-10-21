@@ -1,70 +1,23 @@
-// // angular import
-// import { Component } from '@angular/core';
-// import { Router, RouterModule } from '@angular/router';
-// import { AuthService } from 'src/app/services/auth.service';
-// import { FormsModule } from '@angular/forms';
-
-// @Component({
-//   selector: 'app-login',
-//   standalone: true,
-//   imports: [RouterModule, FormsModule],
-//   templateUrl: './login.component.html',
-//   styleUrls: ['./login.component.scss']
-// })
-// export default class LoginComponent {
-//   userName: string = '';
-//   password: string = '';
-
-//   constructor(private authService: AuthService, private router: Router) {}
-
-//   onLogin() {
-//     this.authService.login(this.userName, this.password).subscribe({
-//       next: (response) => {
-//         console.log('Login successful', response);
-//         // Handle successful login, e.g., storing JWT token
-//         this.router.navigate(['/dashboard']);
-//       },
-//       error: (error) => {
-//         console.error('Login failed', error);
-//         // Handle login error, e.g., show error message to the user
-//       }
-//     });
-//   }
-//   // public method
-//   SignInOptions = [
-//     {
-//       image: 'assets/images/authentication/google.svg',
-//       name: 'Google'
-//     },
-//     {
-//       image: 'assets/images/authentication/twitter.svg',
-//       name: 'Twitter'
-//     },
-//     {
-//       image: 'assets/images/authentication/facebook.svg',
-//       name: 'Facebook'
-//     }
-//   ];
-
-// }
-
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { CustomersService } from 'src/app/services/customers.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, FormsModule],
+  imports: [RouterModule, FormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export default class LoginComponent {
   userName: string = '';
   password: string = '';
+  errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private customersService: CustomersService) {}
 
   onLogin() {
     console.log('Attempting login with:', {
@@ -75,27 +28,47 @@ export default class LoginComponent {
     this.authService.login(this.userName, this.password).subscribe({
       next: (response) => {
         console.log('Login successful:', response);
-        this.router.navigate(['/dashboard/default']);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', this.userName);
+
+        this.fetchTotalMerchants();
+        this.fetchTotalAgents();
+        this.fetchTotalCustomers();
+
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error('Login failed:', error);
+        this.errorMessage = 'Invalid username or password. Please try again.';
       }
     });
   }
 
-  SignInOptions = [
-    {
-      image: 'assets/images/authentication/google.svg',
-      name: 'Google'
-    },
-    {
-      image: 'assets/images/authentication/twitter.svg',
-      name: 'Twitter'
-    },
-    {
-      image: 'assets/images/authentication/facebook.svg',
-      name: 'Facebook'
-    }
-  ];
+  fetchTotalMerchants() {
+    this.customersService.getAllMerchants(1, 1)
+      .subscribe((response: any) => {
+        localStorage.setItem('totalMerchants', response.totalDocuments);
+      });
+  }
+
+  fetchTotalAgents() {
+    this.customersService.getAllAgents(1, 1)
+      .subscribe((response: any) => {
+        localStorage.setItem('totalAgents', response.totalDocuments);
+      });
+  }
+
+  fetchTotalCustomers() {
+    this.customersService.getAllCustomers(1, 1)
+      .subscribe((response: any) => {
+        localStorage.setItem('totalCustomers', response.totalDocuments);
+      });
+  }
+
+  showPassword = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 }
 

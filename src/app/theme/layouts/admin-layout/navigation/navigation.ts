@@ -1,9 +1,12 @@
+import { faHandshake, faWallet, faKey, faCube, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'; // Import karein
+
 export interface NavigationItem {
   id: string;
   title: string;
   type: 'item' | 'collapse' | 'group';
   translate?: string;
-  icon?: string;
+  icon?: IconDefinition | string; // Yahan type ko update karein
   hidden?: boolean;
   url?: string;
   classes?: string;
@@ -16,12 +19,13 @@ export interface NavigationItem {
   link?: string;
   description?: string;
   path?: string;
+  imageUrl?: string;
 }
 
 export const NavigationItems: NavigationItem[] = [
   {
     id: 'dashboard',
-    title: 'Dashboard',
+    title: '',
     type: 'group',
     icon: 'icon-navigation',
     children: [
@@ -30,47 +34,8 @@ export const NavigationItems: NavigationItem[] = [
         title: 'Dashboard',
         type: 'item',
         classes: 'nav-item',
-        url: '/dashboard/default',
-        icon: 'dashboard',
-        breadcrumbs: false
-      },
-      {
-        id: 'customers',
-        title: 'Customers',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/customers',
-        icon: 'profile',
-        target: true,
-        breadcrumbs: false
-      },
-    ]
-  },
-  
-  {
-    id: 'authentication',
-    title: 'Authentication',
-    type: 'group',
-    icon: 'icon-navigation',
-    children: [
-      {
-        id: 'login',
-        title: 'Login',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/login',
-        icon: 'login',
-        target: true,
-        breadcrumbs: false
-      },
-      {
-        id: 'register',
-        title: 'Register',
-        type: 'item',
-        classes: 'nav-item',
-        url: '/register',
-        icon: 'profile',
-        target: true,
+        url: '/dashboard',
+        icon: faKey,
         breadcrumbs: false
       },
       {
@@ -79,8 +44,8 @@ export const NavigationItems: NavigationItem[] = [
         type: 'item',
         classes: 'nav-item',
         url: '/users',
-        icon: 'profile',
-        target: true,
+        icon: faCube,
+        target: false,
         breadcrumbs: false
       },
       {
@@ -89,8 +54,39 @@ export const NavigationItems: NavigationItem[] = [
         type: 'item',
         classes: 'nav-item',
         url: '/customers',
+        icon: 'user',
+        imageUrl: 'assets/images/Appo-Logo.png',
+        target: false,
+        breadcrumbs: false
+      },
+      {
+        id: 'merchant',
+        title: 'Merchant',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/merchant',
+        icon: faWallet,
+        target: false,
+        breadcrumbs: false
+      },
+      {
+        id: 'agent',
+        title: 'Agent',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/agent',
+        icon: faHandshake, // Ye line sahi hai
+        target: false,
+        breadcrumbs: false
+      },
+      {
+        id: 'partner',
+        title: 'Partner',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/partner',
         icon: 'profile',
-        target: true,
+        target: false,
         breadcrumbs: false
       },
       {
@@ -99,81 +95,10 @@ export const NavigationItems: NavigationItem[] = [
         type: 'item',
         classes: 'nav-item',
         url: '/transactions',
-        icon: 'profile',
-        target: true,
+        icon: faMoneyBill,
+        target: false,
         breadcrumbs: false
       }
     ]
   },
-  {
-    id: 'block-unblock',
-    title: 'Block/Unblock',
-    type: 'item',
-    classes: 'nav-item',
-    url: '/block-unblock',
-    icon: 'lock',
-    target: true,
-    breadcrumbs: false
-  },
-  // {
-  //   id: 'utilities',
-  //   title: 'UI Components',
-  //   type: 'group',
-  //   icon: 'icon-navigation',
-  //   children: [
-  //     {
-  //       id: 'typography',
-  //       title: 'Typography',
-  //       type: 'item',
-  //       classes: 'nav-item',
-  //       url: '/typography',
-  //       icon: 'font-size'
-  //     },
-  //     {
-  //       id: 'color',
-  //       title: 'Colors',
-  //       type: 'item',
-  //       classes: 'nav-item',
-  //       url: '/color',
-  //       icon: 'bg-colors'
-  //     },
-  //     {
-  //       id: 'tabler',
-  //       title: 'Tabler',
-  //       type: 'item',
-  //       classes: 'nav-item',
-  //       url: 'https://ant.design/components/icon',
-  //       icon: 'ant-design',
-  //       target: true,
-  //       external: true
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   id: 'other',
-  //   title: 'Other',
-  //   type: 'group',
-  //   icon: 'icon-navigation',
-  //   children: [
-  //     {
-  //       id: 'sample-page',
-  //       title: 'Sample Page',
-  //       type: 'item',
-  //       url: '/sample-page',
-  //       classes: 'nav-item',
-  //       icon: 'chrome'
-  //     },
-  //     {
-  //       id: 'document',
-  //       title: 'Document',
-  //       type: 'item',
-  //       classes: 'nav-item',
-  //       url: 'https://codedthemes.gitbook.io/mantis-angular/',
-  //       icon: 'question',
-  //       target: true,
-  //       external: true
-  //     }
-  //   ]
-  // }
 ];

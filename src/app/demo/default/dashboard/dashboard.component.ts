@@ -1,5 +1,5 @@
 // angular import
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // project import
@@ -29,53 +29,40 @@ import { FallOutline, GiftOutline, MessageOutline, RiseOutline, SettingOutline }
   styleUrls: ['./dashboard.component.scss']
 })
 export class DefaultComponent {
+
+  totalMerchants: number = 0;
+  totalAgents: number = 0;
+  totalCustomers: number = 0;
+
   // constructor
   constructor(private iconService: IconService) {
     this.iconService.addIcon(...[RiseOutline, FallOutline, SettingOutline, GiftOutline, MessageOutline]);
   }
 
+  ngOnInit() {
+    this.totalMerchants = parseInt(localStorage.getItem('totalMerchants') || '0');
+    this.totalAgents = parseInt(localStorage.getItem('totalAgents') || '0');
+    this.totalCustomers = parseInt(localStorage.getItem('totalCustomers') || '0');
+
+  }
   recentOrder = tableData;
 
   AnalyticEcommerce = [
     {
-      title: 'Total Page Views',
-      amount: '4,42,236',
-      background: 'bg-light-primary ',
-      border: 'border-primary',
-      icon: 'rise',
-      percentage: '59.3%',
-      color: 'text-primary',
-      number: '35,000'
+      title: 'Total Customers',
+      amount: '5,423',
+      percentage: '↑ 16% this month'
     },
     {
-      title: 'Total Users',
-      amount: '78,250',
-      background: 'bg-light-primary ',
-      border: 'border-primary',
-      icon: 'rise',
-      percentage: '70.5%',
-      color: 'text-primary',
-      number: '8,900'
+      title: 'Members',
+      amount: '1,893',
+      percentage: '↓ 1% this month'
     },
     {
-      title: 'Total Order',
-      amount: '18,800',
-      background: 'bg-light-warning ',
-      border: 'border-warning',
-      icon: 'fall',
-      percentage: '27.4%',
-      color: 'text-warning',
-      number: '1,943'
-    },
-    {
-      title: 'Total Sales',
-      amount: '$35,078',
-      background: 'bg-light-warning ',
-      border: 'border-warning',
-      icon: 'fall',
-      percentage: '27.4%',
-      color: 'text-warning',
-      number: '$20,395'
+      title: 'Active Now',
+      amount: '189',
+      percentage: '↓ 1% this month'
+
     }
   ];
 
