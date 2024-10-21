@@ -56,26 +56,13 @@ export class UsersComponent implements OnInit {
     this.router.navigate(['/create-customer']);
   }
 
-  // loadUsers(): void {
-  //   this.customersService.getAllUsers(this.currentPage - 1, this.size).subscribe(
-  //     data => {
-  //       this.users = data.data; // Adjust based on the actual response structure
-  //       this.totalElements = data.totalElements;
-  //     },
-  //     err => {
-  //       this.error = 'Error fetching users: ' + err.message;
-  //     }
-  //   );
-  // }
 
   loadUsers(): void {
-    // Aapka API call yahan ho ga to fetch customers for current page
-    const pageIndex = this.currentPage - 1;  // API pagination usually starts from 0
+    const pageIndex = this.currentPage - 1;
 
     this.customersService.getAllUsers(pageIndex, this.pageSize).subscribe((response: any) => {
-      // this.users = response.data;
       this.users = response.data.sort((a: any, b: any) => a.id - b.id);
-      this.totalRecords = response.totalDocuments;  // Total records
+      this.totalRecords = response.totalDocuments; 
       this.setPagination(this.totalRecords);
     });
   }
@@ -90,13 +77,11 @@ export class UsersComponent implements OnInit {
     this.totalPages = Array.from({ length: totalPagesCount }, (_, index) => index + 1);
   }
 
-  // Go to specific page
   goToPage(page: number): void {
     this.currentPage = page;
     this.loadUsers();
   }
 
-  // Go to previous page
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -104,7 +89,6 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  // Go to next page
   nextPage(): void {
     if (this.currentPage < this.totalPages.length) {
       this.currentPage++;
@@ -131,12 +115,11 @@ export class UsersComponent implements OnInit {
     };
 
     this.http.post(`${this.environment}/user/sign-up`, payload).subscribe(
-    // this.http.post('http://localhost:8080/user/sign-up', payload).subscribe(
       (response) => {
         console.log('User created successfully:', response);
-        this.loadUsers(); // Refresh the user list after creating a new user
+        this.loadUsers();
         if (this.modalRef) {
-          this.modalRef.close(); // Close the modal if it's open
+          this.modalRef.close();
         }
       },
       (err) => {
@@ -173,7 +156,7 @@ export class UsersComponent implements OnInit {
         console.log('User updated:', response);
         this.loadUsers(); 
         if (this.modalRef) {
-          this.modalRef.close(); // Close the modal if it's open
+          this.modalRef.close();
         }
       },
       (err) => {
@@ -183,13 +166,12 @@ export class UsersComponent implements OnInit {
   }
 
   openBlockUnblockModal(content: TemplateRef<any>, user: any): void {
-    this.selectedUser = user; // Set the selected user
+    this.selectedUser = user;
     this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
   confirmBlockUnblock(): void {
     if (this.selectedUser) {
-      // Update only the block/unblock status
       const updatedUser = {
         username: this.selectedUser.userName,
         password: this.selectedUser.password,
@@ -202,7 +184,7 @@ export class UsersComponent implements OnInit {
           console.log('User block/unblock status updated:', response);
           this.selectedUser.blocked = !this.selectedUser.blocked;
           if (this.modalRef) {
-            this.modalRef.close(); // Close the modal
+            this.modalRef.close();
           }
         },
         error => {

@@ -25,7 +25,7 @@ export class MerchantComponent implements OnInit{
   size: number = 10;
   error: string | null = null;
   closeResult = '';
-  selectedCustomer: any = null; // To store selected customer data
+  selectedCustomer: any = null;
   selectedMerchant: any = null; 
   private modalService = inject(NgbModal);
   private modalRef: NgbModalRef | null = null;
@@ -39,7 +39,7 @@ export class MerchantComponent implements OnInit{
   totalRecords: number = 0;
   searchTerm: string = ''; 
   merchantOriginal: any[] = [];
-  pageSizeOptions: number[] = [5, 10, 20, 50, 100]; // Customize page size options
+  pageSizeOptions: number[] = [5, 10, 20, 50, 100];
 
   constructor(private http: HttpClient, private router: Router, private customersService: CustomersService) {}
 
@@ -47,29 +47,16 @@ export class MerchantComponent implements OnInit{
     this.loadMerchants();
   }
 
-  // loadMerchants(): void { // Change from 'loadCustomers' to 'loadMerchants'
-  //   this.customersService.getAllMerchants(this.page, this.size).subscribe( // Update service call
-  //     data => {
-  //       this.merchants = data.data; // Adjust based on the actual response structure
-  //     },
-  //     err => {
-  //       this.error = 'Error fetching merchants: ' + err.message; // Update error message
-  //     }
-  //   );
-  // }
-
   loadMerchants(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    // Aapka API call yahan ho ga to fetch customers for current page
-    const pageIndex = this.currentPage - 1;  // API pagination usually starts from 0
+    const pageIndex = this.currentPage - 1;
 
     this.customersService.getAllMerchants(pageIndex, this.pageSize).subscribe((response: any) => {
-      // this.merchants = response.data;
-      this.merchants = response.data.slice(startIndex, endIndex); // Fetch only required records
-      this.merchants = response.data.sort((a: any, b: any) => a.id - b.id); // Sorting by ID in ascending order
-      this.merchantOriginal = [...this.merchants]; // Save the original customer list
-      this.totalRecords = response.totalDocuments;  // Total records
+      this.merchants = response.data.slice(startIndex, endIndex);
+      this.merchants = response.data.sort((a: any, b: any) => a.id - b.id);
+      this.merchantOriginal = [...this.merchants];
+      this.totalRecords = response.totalDocuments;
       this.setPagination(this.totalRecords);
     });
   }
@@ -84,13 +71,11 @@ export class MerchantComponent implements OnInit{
     this.totalPages = Array.from({ length: totalPagesCount }, (_, index) => index + 1);
   }
 
-  // Go to specific page
   goToPage(page: number): void {
     this.currentPage = page;
     this.loadMerchants();
   }
 
-  // Go to previous page
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -98,7 +83,6 @@ export class MerchantComponent implements OnInit{
     }
   }
 
-  // Go to next page
   nextPage(): void {
     if (this.currentPage < this.totalPages.length) {
       this.currentPage++;
@@ -131,17 +115,7 @@ export class MerchantComponent implements OnInit{
     this.router.navigate(['/create-merchant'], { queryParams: { mode: 'create' } });
   }
 
-  // openEditModal(content: TemplateRef<any>, id: number): void {
-  //   this.customersService.getMerchantById(id).subscribe(
-  //     data => {
-  //       this.selectedMerchant = data; // Load customer data
-  //       this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
-  //     },
-  //     err => {
-  //       console.error('Error fetching merchant:', err.message);
-  //     }
-  //   );
-  // }
+
   openEditMerchant(merchantId: number): void {
     this.router.navigate(['/create-merchant'], { queryParams: { mode: 'edit', id: merchantId } });
   }
@@ -154,9 +128,9 @@ export class MerchantComponent implements OnInit{
     if (this.selectedMerchant) {
       this.customersService.updateMerchant(this.selectedMerchant.id, this.selectedMerchant).subscribe(
         () => {
-          this.loadMerchants(); // Refresh merchants list after update
+          this.loadMerchants();
           if (this.modalRef) {
-            this.modalRef.close(); // Close the modal
+            this.modalRef.close();
           }
         },
         err => {
@@ -177,9 +151,9 @@ export class MerchantComponent implements OnInit{
       response => {
         console.log('Block/Unblock response:', response);
         this.selectedMerchant.isBlocked = block;
-        this.loadMerchants(); // Refresh the merchant list
+        this.loadMerchants();
         if (this.blockUnblockModalRef) {
-          this.blockUnblockModalRef.close(); // Close the modal using NgbModalRef
+          this.blockUnblockModalRef.close();
         }
       },
       error => {
@@ -189,23 +163,13 @@ export class MerchantComponent implements OnInit{
     );
   }
 
-  // getRowClass(country: string): string {
-  //   if (country === 'Andorra') {
-  //     return 'bg-success'; // Green background for Andorra
-  //   } else if (country === 'Argentina') {
-  //     return 'bg-info'; // Blue background for Argentina
-  //   } else {
-  //     return 'bg-danger'; // Red background for other countries
-  //   }
-  // }
-
   getRowClass(risk: number): any {
     if (risk < 10) {
-      return 'bg-success'; // Green for risk score < 10
+      return 'bg-success';
     } else if (risk >= 10 && risk < 15) {
-      return 'bg-info'; // Yellow for risk score between 10 and 15
+      return 'bg-info';
     } else {
-      return 'bg-danger'; // Red for risk score >= 15
+      return 'bg-danger';
     }
   }
 
@@ -216,7 +180,7 @@ export class MerchantComponent implements OnInit{
   onSearch() {
     const searchTerm = this.searchTerm.toLowerCase();
     if (searchTerm === '') {
-      this.merchants = [...this.merchantOriginal]; // Reset to original list if search is cleared
+      this.merchants = [...this.merchantOriginal];
     } else {
       this.merchants = this.merchantOriginal.filter(merchant => {
         return merchant.legalName.toLowerCase().includes(searchTerm);

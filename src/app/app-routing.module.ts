@@ -30,10 +30,6 @@ const routes: Routes = [
         loadComponent: () => import('./demo/ui-component/ui-color/ui-color.component')
       },
       {
-        path: 'sample-page',
-        loadComponent: () => import('./demo/other/sample-page/sample-page.component')
-      },
-      {
         path: 'customers',
         loadComponent: () => import('./customers/customers.component').then(m => m.CustomersComponent),
       },
@@ -91,7 +87,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'login' // Agar koi unknown path par jaye, to login par redirect karein
+    redirectTo: 'login'
   }
 ];
 

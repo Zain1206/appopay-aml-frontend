@@ -7,8 +7,8 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class CustomersService {
-  // private environment = 'https://aml-backend.appopay.com'
-  private environment = 'http://localhost:8080'
+  private environment = 'https://aml-backend.appopay.com'
+  // private environment = 'http://localhost:8080'
   // private baseUrl = 'https://aml-backend.appopay.com/customer';
   private baseUrl = `${this.environment}/customer`;
 

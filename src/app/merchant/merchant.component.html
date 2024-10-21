@@ -5,7 +5,6 @@
       <div class="search-bar">
         <i class="fas fa-search search-icon"></i>
         <input type="text" placeholder="Search" [(ngModel)]="searchTerm" (keyup)="onSearch()">
-        <!-- <i class="search" antIcon type="search" theme="outline"></i> -->
       </div>
       <div class="sort-dropdown" style="float: right; padding-right: 30px; padding-left: 15px;">
         Sort by: Newest
@@ -24,7 +23,6 @@
             <th>Country</th>
             <th>Telephone</th>
             <th>Email</th>
-            <!-- <th>Risk Score</th> -->
             <th>Actions</th>
           </tr>
         </thead>
@@ -37,22 +35,6 @@
             <td>{{ merchant.country }}</td>
             <td>{{ merchant.telephone }}</td>
             <td>{{ merchant.email }}</td>
-            <!-- <td>{{ merchant.riskScore }}</td> -->
-            <!-- <td>
-                <i *ngIf="merchant.politicallyExposedPerson" class="fas fa-flag" style="color: red;"></i>
-                <i *ngIf="!merchant.politicallyExposedPerson" class="fas fa-flag" style="color: grey;"></i>
-              </td> -->
-            <!-- <td>
-                <button (click)="openViewMerchant(merchant.id)">
-                  <i class="fa fa-eye"></i>
-                </button>
-                <button (click)="openEditMerchant(merchant.id)">
-                  <i class="fa fa-pencil"></i>
-                </button>
-                <button (click)="openBlockUnblockModal(blockUnblockModal, merchant)" class="btn btn-sm">
-                  <i class="fas fa-ban"></i>
-                </button>
-              </td> -->
             <div ngbDropdown>
               <button class="btn btn-link p-0 arrow-none" ngbDropdownToggle>
                 <i class="fas fa-ellipsis-v"></i>
@@ -159,7 +141,6 @@
     </form>
   </div>
   <div class="modal-footer">
-    <!-- <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Close click')">Cancel</button> -->
     <button type="button" class="btn btn-primary" (click)="updateMerchant()">Update</button>
   </div>
 </ng-template>
@@ -174,7 +155,6 @@
     <p>Are you sure you want to {{ selectedMerchant?.isBlocked ? 'unblock' : 'block' }} this merchant?</p>
   </div>
   <div class="modal-footer">
-    <!-- <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('Close click')">Cancel</button> -->
     <button type="button" class="btn btn-primary" (click)="blockUnblockCMerchant()">Confirm</button>
   </div>
 </ng-template>

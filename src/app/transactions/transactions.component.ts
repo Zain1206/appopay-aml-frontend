@@ -26,7 +26,7 @@ export class TransactionsComponent implements OnInit {
   error: string | null = null;
   size: number = 50;
   selectedOption: string | null = null;
-  pageSizeOptions: number[] = [5, 10, 20, 50, 100]; // Customize page size options
+  pageSizeOptions: number[] = [5, 10, 20, 50, 100];
   searchTerm: string = ''; 
   transactionOriginal: any[] = [];
 
@@ -40,9 +40,9 @@ export class TransactionsComponent implements OnInit {
   loadTransactions(): void {
     const pageIndex = this.currentPage - 1;
     this.customersService.getAllTransactions(pageIndex, this.pageSize).subscribe((response: any) => {
-      this.transactions = response.data.sort((a: any, b: any) => a.id - b.id); // Sorting by ID in ascending order
-      this.transactionOriginal = [...this.transactions]; // Save the original customer list
-      this.totalRecords = response.totalDocuments;  // Total records
+      this.transactions = response.data.sort((a: any, b: any) => a.id - b.id);
+      this.transactionOriginal = [...this.transactions];
+      this.totalRecords = response.totalDocuments;
       this.setPagination(this.totalRecords); 
            },
         err => {
@@ -61,13 +61,11 @@ export class TransactionsComponent implements OnInit {
     this.totalPages = Array.from({ length: totalPagesCount }, (_, index) => index + 1);
   }
   
-  // Go to specific page
   goToPage(page: number): void {
     this.currentPage = page;
     this.loadTransactions();
   }
   
-  // Go to previous page
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
@@ -75,7 +73,6 @@ export class TransactionsComponent implements OnInit {
     }
   }
   
-  // Go to next page
   nextPage(): void {
     if (this.currentPage < this.totalPages.length) {
       this.currentPage++;
@@ -88,23 +85,16 @@ export class TransactionsComponent implements OnInit {
     this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
-  // flagTransaction(transaction: any): void {
-  //   transaction.allowed = !transaction.allowed;
-  //   console.log('Transaction flag status changed:', transaction);
-  // }
-
   flagTransaction(transaction: any): void {
-    // Assume transaction has a reference to customer ID
-    const block = !transaction.allowed; // 'allowed' determines whether to block/unblock
+    const block = !transaction.allowed;
     this.customersService.blockUnblockCustomer(transaction.customerId, block).subscribe(
       response => {
         console.log('Block/Unblock response:', response);
-        transaction.allowed = !transaction.allowed; // Toggle the allowed state
+        transaction.allowed = !transaction.allowed;
         console.log(`Transaction for Customer ID ${transaction.customerId} is now ${block ? 'Blocked' : 'Unblocked'}`);
       },
       error => {
         console.error('Error in Block/Unblock:', error);
-        // Handle error
       }
     );
 }

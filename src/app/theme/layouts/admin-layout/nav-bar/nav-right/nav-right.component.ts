@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
-// third party
 
 // icon
 import { IconService } from '@ant-design/icons-angular';
@@ -90,22 +89,7 @@ export class NavRightComponent {
   }
   
   profile = [
-    // {
-    //   icon: 'edit',
-    //   title: 'Edit Profile'
-    // },
-    // {
-    //   icon: 'user',
-    //   title: 'View Profile'
-    // },
-    // {
-    //   icon: 'profile',
-    //   title: 'Social Profile'
-    // },
-    // {
-    //   icon: 'wallet',
-    //   title: 'Billing'
-    // }
+ 
   ];
 
   setting = [

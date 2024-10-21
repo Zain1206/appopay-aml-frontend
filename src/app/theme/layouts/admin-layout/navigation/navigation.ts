@@ -1,12 +1,12 @@
 import { faHandshake, faWallet, faKey, faCube, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'; // Import karein
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 export interface NavigationItem {
   id: string;
   title: string;
   type: 'item' | 'collapse' | 'group';
   translate?: string;
-  icon?: IconDefinition | string; // Yahan type ko update karein
+  icon?: IconDefinition | string;
   hidden?: boolean;
   url?: string;
   classes?: string;
@@ -75,7 +75,7 @@ export const NavigationItems: NavigationItem[] = [
         type: 'item',
         classes: 'nav-item',
         url: '/agent',
-        icon: faHandshake, // Ye line sahi hai
+        icon: faHandshake,
         target: false,
         breadcrumbs: false
       },
